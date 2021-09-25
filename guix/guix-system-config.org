@@ -4,7 +4,7 @@
 
 
 * System Configuration
-#+begin_src scheme :tangle .config/guix/config.scm
+#+begin_src scheme :tangle ~/.config/guix/config.scm
 ;; This is an operating system configuration template
 ;; for a "desktop" setup with GNOME and Xfce where the
 ;; root partition is encrypted with LUKS.
@@ -12,7 +12,8 @@
 (use-modules (gnu) (gnu system nss))
 ;; Import nonfree linux module
 (use-modules (nongnu packages linux)
-	     (nongnu system linux-initrd))
+	     (nongnu system linux-initrd)
+       (nongnu packages nvidia))
 
 (use-modules (gnu packages commencement))
 
@@ -71,8 +72,16 @@
 ;;                                (udev-configuration-rules config)
 ;;                                (list %onlykey-udev-rule)))))))
 
+(define transform
+  (options->transformation
+   '((with-graft . "mesa=nvda"))))
+
 (operating-system
  (kernel linux)
+ (kernel-arguments (append
+                    '("modprobe.blacklist=nouveau")
+                    %default-kernel-arguments))
+ (kernel-loadable-modules (list nvidia-driver))
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
   (host-name "wmguix")
@@ -156,7 +165,18 @@
                           ;; (udev-rules-service 'onlykey-usb %onlykey-udev-rule)
                           (set-xorg-configuration
                            (xorg-configuration
-                            (keyboard-layout keyboard-layout))))
+                            (keyboard-layout keyboard-layout)
+                            (modules (cons* nvidia-driver %default-xorg-modules))
+                            (server (transform xorg-server))
+                            (drivers '("nvidia"))))
+                          (simple-service 'custom-udev-rules 
+                                          udev-service-type
+                                          (list nvidia-driver))
+                          (service kernel-module-loader-service-type
+                                   '("ipmi_devintf"
+                                     "nvidia"
+                                     "nvidia_modeset"
+                                     "nvidia_uvm")))
                     %my-services))
   
   ;; Allow resolution of '.local' host names with mDNS.
@@ -164,7 +184,7 @@
 #+end_src
 
 * User Tools
-#+begin_src scheme :tangle .config/guix/manifest.scm
+#+begin_src scheme :tangle ~/.config/guix/manifest.scm
 ;; This "manifest" file can be passed to 'guix package -m' to reproduce
 ;; the content of your profile.  This is "symbolic": it only specifies
 ;; package names.  To reproduce the exact same profile, you also need to
@@ -185,11 +205,11 @@
                             "redshift" "gnome-bluetooth" "guile" "ghc@8.6.5" 
                             "ghc-xmonad-contrib" "fish" "qutebrowser" "anki" "blueman" 
                             "bluez" "firefox" "keepassxc" "syncthing-gtk"
-                            "emacs-paredit" "unzip" "openssh" "gnupg" "gpa")
+                            "emacs-paredit" "unzip" "openssh" "gnupg" "gpa" "stow")
 )
 #+end_src
 ** Emacs
-#+begin_src emacs-lisp :tangle .config/emacs/init.el
+#+begin_src emacs-lisp :tangle ~/.config/emacs/init.el
 ;; (add-to-list 'load-path "/home/antwane/.guix-profile/share/emacs/site-lisp")
 ;; (guix-emacs-autoload-packages)
 
