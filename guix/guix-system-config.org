@@ -1,0 +1,339 @@
+:PROPERTIES: 
+:header-args :noweb yes :comments noweb
+:END:
+
+
+* System Configuration
+#+begin_src scheme :tangle .config/guix/config.scm
+;; This is an operating system configuration template
+;; for a "desktop" setup with GNOME and Xfce where the
+;; root partition is encrypted with LUKS.
+
+(use-modules (gnu) (gnu system nss))
+;; Import nonfree linux module
+(use-modules (nongnu packages linux)
+	     (nongnu system linux-initrd))
+
+(use-modules (gnu packages commencement))
+
+(use-modules (guix download)
+             (guix packages))
+
+(use-service-modules desktop xorg syncthing)
+(use-package-modules certs gnome vim bash)
+
+;; (define %onlykey-udev-rule
+;;   (udev-rule
+;;    "49-onlykey.rules"
+;;    (string-join `("ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", ENV{ID_MM_DEVICE_IGNORE}=\"1\""
+;;                   "ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", ENV{MTP_NO_PROBE}=\"1\""
+;;                   "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", MODE:=\"0666\""
+;;                   "KERNEL==\"ttyACM*\", ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", MODE:=\"0666\""
+;;                                         ; Following is to automatically set current time for OTP
+;;                                         ; "SUBSYSTEMS==\"usb\", ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", MODE:=\"0660\", GROUP:=\"onlykey\", RUN+=\"/usr/local/bin/onlykey-cli settime\""
+;;                                         ; "KERNEL==\"ttyACM*\", ATTRS{idVendor}==\"1d50\", ATTRS{idProduct}==\"60fc\", MODE:=\"0660\", GROUP:=\"onlykey\", RUN+=\"/usr/local/bin/onlykey-cli settime\"")
+;;                   "\n"
+;;                   ))))
+
+(define %onlykey-udev-rule
+  (file->udev-rule
+    "49-onlykey.rules"
+    (let ((version "v1.2.5"))
+      (origin
+       (method url-fetch)
+       (uri 
+"https://raw.githubusercontent.com/M0Rf30/https://raw.githubusercontent.com/trustcrypto/trustcrypto.github.io/master/49-onlykey.rules")
+       (sha256
+        (base32 "1pj9i4hp0d74073x1qqwigd0cyriamg65zmx2j98mi0k66qrhcxa"))))))
+
+(define %my-services
+  (modify-services %desktop-services
+                   (udev-service-type config =>
+                                      (udev-configuration
+                                       (inherit config)
+                                       (rules (append
+                                               (udev-configuration-rules config)
+                                               (list %onlykey-udev-rule)))))))
+;; (define %my-services
+;;   (modify-services
+;;    (append (list (service gnome-desktop-service-type)
+;;                  (service xfce-desktop-service-type)
+;;                  (bluetooth-service #:auto-enable? #t)
+;;                  ;; (udev-rules-service 'onlykey-usb %onlykey-udev-rule)
+;;                  (set-xorg-configuration
+;;                   (xorg-configuration
+;;                    (keyboard-layout keyboard-layout))))
+;;            %desktop-services)
+;;    (udev-service-type config =>
+;;                       (udev-configuration
+;;                        (inherit config)
+;;                        (rules (append
+;;                                (udev-configuration-rules config)
+;;                                (list %onlykey-udev-rule)))))))
+
+(operating-system
+ (kernel linux)
+ (initrd microcode-initrd)
+ (firmware (list linux-firmware))
+  (host-name "wmguix")
+  (timezone "America/Indiana/Indianapolis")
+  (locale "en_US.utf8")
+
+  ;; Choose US English keyboard layout.  The "altgr-intl"
+  ;; variant provides dead keys for accented characters.
+  (keyboard-layout (keyboard-layout "us" ))
+
+  ;; Use the UEFI variant of GRUB with the EFI System
+  ;; Partition mounted on /boot/efi.
+  (bootloader (bootloader-configuration
+                (bootloader grub-efi-bootloader)
+                (target "/boot/efi")
+                (keyboard-layout keyboard-layout)))
+
+  ;; Specify a mapped device for the encrypted home partition.
+  ;; The UUID is that returned by 'cryptsetup luksUUID'.
+  (mapped-devices
+   (list (mapped-device
+          (source (uuid "7af8814d-306f-44f2-a7ff-fb68ef9808ce"))
+          (target "guix-home")
+          (type luks-device-mapping))))
+
+  (file-systems (append
+                 (list (file-system
+                         (device (uuid "ac61e73a-55a8-4e82-8fe3-6fef4d05ad68"))
+                         (mount-point "/")
+                         (type "ext4"))
+		       (file-system
+                         (device (file-system-label "guix-home"))
+                         (mount-point "/home")
+                         (type "btrfs")
+	 		 (options "subvol=home") 
+                         (dependencies mapped-devices))
+                       (file-system
+                         (device (uuid "CB9A-335B" 'fat))
+                         (mount-point "/boot/efi")
+                         (type "vfat")))
+                 %base-file-systems))
+
+  ;; Create user
+  (users (append
+	  (list (user-account
+                (name "antwane")
+                (group "users")
+                ;; lp group needed for bluetooth 
+                (supplementary-groups '("wheel" "netdev"
+                                        "audio" "video" "gdm" "lp"))
+		(home-directory "/home/antwane")))
+               %base-user-accounts))
+
+  ;; This is where we specify system-wide packages.
+  (packages (append (list
+                     ;; for HTTPS access
+                     nss-certs
+                     ;; for user mounts
+                     gvfs
+		                 vim
+		                 bash)
+                    %base-packages))
+
+  ;; Add GNOME and Xfce---we can choose at the log-in screen
+  ;; by clicking the gear.  Use the "desktop" services, which
+  ;; include the X11 log-in service, networking with
+  ;; NetworkManager, and more.
+  ;; (services (append (list (service gnome-desktop-service-type)
+  ;;                         (service xfce-desktop-service-type)
+  ;;                         (bluetooth-service #:auto-enable? #t)
+  ;;                         ;; (udev-rules-service 'onlykey-usb %onlykey-udev-rule)
+  ;;                         (set-xorg-configuration
+  ;;                          (xorg-configuration
+  ;;                           (keyboard-layout keyboard-layout))))
+  ;;                   %desktop-services))
+  (services (append (list (service gnome-desktop-service-type)
+                          (service xfce-desktop-service-type)
+                          (service syncthing-service-type
+                                   (syncthing-configuration (user "antwane")))
+                          (bluetooth-service #:auto-enable? #t)
+                          ;; (udev-rules-service 'onlykey-usb %onlykey-udev-rule)
+                          (set-xorg-configuration
+                           (xorg-configuration
+                            (keyboard-layout keyboard-layout))))
+                    %my-services))
+  
+  ;; Allow resolution of '.local' host names with mDNS.
+  (name-service-switch %mdns-host-lookup-nss))
+#+end_src
+
+* User Tools
+#+begin_src scheme :tangle .config/guix/manifest.scm
+;; This "manifest" file can be passed to 'guix package -m' to reproduce
+;; the content of your profile.  This is "symbolic": it only specifies
+;; package names.  To reproduce the exact same profile, you also need to
+;; capture the channels being used, as returned by "guix describe".
+;; See the "Replicating Guix" section in the manual.
+
+
+(specifications->manifest '("emacs" "emacs-use-package" "emacs-magit" "emacs-ivy"
+                            "emacs-avy" "emacs-ivy-avy" "emacs-lsp-ivy"
+			                      "emacs-ivy-omni-org" "emacs-counsel"
+                            "emacs-counsel-projectile" "emacs-which-key"
+                            "emacs-projectile" "emacs-lsp-mode" "emacs-company-lsp"
+			                      "emacs-org-roam" "emacs-flycheck" "emacs-helpful"
+                            "emacs-doom-themes" "emacs-lsp-mode" "emacs-company"
+                            "emacs-yasnippet" "emacs-paredit" "emacs-guix"
+			                      "emacs-geiser" "emacs-haskell-mode" "emacs-org-ref" 
+                            "emacs-polymode-org" "emacs-org" "icecat" "git" "unzip"
+                            "redshift" "gnome-bluetooth" "guile" "ghc@8.6.5" 
+                            "ghc-xmonad-contrib" "fish" "qutebrowser" "anki" "blueman" 
+                            "bluez" "firefox" "keepassxc" "syncthing-gtk"
+                            "emacs-paredit" "unzip" "openssh" "gnupg" "gpa")
+)
+#+end_src
+** Emacs
+#+begin_src emacs-lisp :tangle .config/emacs/init.el
+;; (add-to-list 'load-path "/home/antwane/.guix-profile/share/emacs/site-lisp")
+;; (guix-emacs-autoload-packages)
+
+(require 'use-package)
+
+(setq-default tab-width 2)
+;; use spaces instead of tabs for indenting
+(setq-default indent-tabs-mode nil)
+;; increase font size
+(set-face-attribute 'default nil :height 250)
+
+(with-eval-after-load 'geiser-guile
+  (add-to-list 'geiser-guile-load-path "~/dev/guix"))
+
+(use-package which-key
+ ;; :config runs code after package loaded
+  :config (which-key-mode))
+
+(use-package projectile
+  :init
+  (setq projectile-project-search-path '("~/dev/Aunalytics" "~/dev/Aunalytics/aunsight-docker-dev/repos"))
+  :config
+  (projectile-mode)
+  :bind-keymap
+  ("C-c p" . projectile-command-map))
+
+(use-package ivy
+:defer 0.1
+:config (ivy-mode))
+
+(use-package counsel
+:after ivy
+:config (counsel-mode))
+
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'")
+
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((js-mode . lsp)
+         (dockerfile-mode . lsp)
+      (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+
+(use-package magit
+  :init
+  ;; added to show gpg sign commit option
+  (setq transient-default-level 5))
+
+(use-package org-roam
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Documents/zettelkasten")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))
+
+(use-package lsp-ivy)
+
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind (:map company-active-map
+         ("<tab>" . company-complete-selection))
+        (:map lsp-mode-map
+         ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
+
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+
+(use-package avy
+  :bind (("C-'" . avy-goto-char-timer)
+         ("M-g g" . avy-goto-line)
+         ("M-g w" . avy-goto-word-1)))
+
+(use-package doom-themes
+:config
+(load-theme 'doom-city-lights t))
+
+(use-package haskell-mode)
+
+;; Better handling of paranthesis when writing Lisps.
+(use-package paredit
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook #'enable-paredit-mode)
+  (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  :config
+  (show-paren-mode t)
+  :bind (("M-[" . paredit-wrap-square)
+         ("M-{" . paredit-wrap-curly))
+  :diminish nil)
+
+;; turn off auto indent globally
+(electric-indent-mode 0)
+(global-display-line-numbers-mode)
+;; still see lines that are too long
+;; (global-visual-line-mode)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mac-option-modifier 'meta)
+ '(mac-right-option-modifier nil)
+ '(package-selected-packages
+   '(dockerfile-mode avy helpful company lsp-ivy flycheck doom-themes solarized-theme solarized-them org-roam magit lsp-mode projectile which-key use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+#+end_src
+
+** Web Browser
+
+
+
