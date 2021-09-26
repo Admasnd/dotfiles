@@ -18,10 +18,11 @@
 (use-modules (gnu packages commencement))
 
 (use-modules (guix download)
-             (guix packages))
+             (guix packages)
+             (guix transformations))
 
-(use-service-modules desktop xorg syncthing)
-(use-package-modules certs gnome vim bash)
+(use-service-modules desktop xorg syncthing linux)
+(use-package-modules certs gnome vim bash xorg)
 
 ;; (define %onlykey-udev-rule
 ;;   (udev-rule
