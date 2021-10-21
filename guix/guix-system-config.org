@@ -193,10 +193,9 @@
                             "emacs-doom-themes" "emacs-lsp-mode" "emacs-company"
                             "emacs-yasnippet" "emacs-paredit" "emacs-guix"
 			                      "emacs-geiser" "emacs-haskell-mode" "emacs-org-ref" 
-                            "emacs-polymode-org" "emacs-org" "icecat" "git" "unzip"
-                            "redshift" "gnome-bluetooth" "guile" "ghc@8.6.5" 
-                            "ghc-xmonad-contrib" "fish" "qutebrowser" "anki" "blueman" 
-                            "bluez" "firefox" "keepassxc" "syncthing-gtk"
+                            "emacs-polymode-org" "emacs-org"  "git" 
+                            "redshift" "gnome-bluetooth" "guile" "qutebrowser" "anki" 
+                            "firefox" "keepassxc" "syncthing-gtk"
                             "emacs-paredit" "unzip" "openssh" "gnupg" "gpa")
 )
 #+end_src
