@@ -3,6 +3,8 @@
   nixpkgs-stable,
   ...
 }: {
+  imports = [./git.nix];
+
   nixpkgs.config.allowUnfree = true;
 
   programs.home-manager.enable = true;
@@ -63,12 +65,6 @@
       rustup
       radicle-node
     ]);
-
-  programs.git = {
-    enable = true;
-    userName = "Antwane Mason";
-    userEmail = "git@aimai.simplelogin.com";
-  };
 
   programs.nvf = {
     enable = true;
