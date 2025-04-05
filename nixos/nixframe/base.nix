@@ -1,12 +1,13 @@
-
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   # enable flakes support
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   services.resolved.enable = true;
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.networkmanager.dns = "systemd-resolved";
 
   # Set your time zone.
@@ -20,7 +21,7 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  
+
   # Enable sound.
   security.rtkit.enable = true;
   services.pipewire = {
@@ -37,9 +38,9 @@
   services.yubikey-agent.enable = true;
   # enable use of Smart card mode (CCID) of Yubikey
   services.pcscd.enable = true;
-  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.udev.packages = [pkgs.yubikey-personalization];
 
-  system.autoUpgrade.enable = true;
+  # system.autoUpgrade.enable = true;
 
   fonts.packages = with pkgs; [
     noto-fonts
@@ -56,5 +57,4 @@
   ];
 
   system.stateVersion = "22.05"; # Did you read the comment?
-
 }

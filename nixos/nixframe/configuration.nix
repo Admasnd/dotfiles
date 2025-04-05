@@ -71,12 +71,12 @@
   };
 
   # auto upgrade settings
-  system.autoUpgrade.flake = "git+file:///home/antwane/dev/nixframe";
-  system.autoUpgrade.allowReboot = false;
-  system.autoUpgrade.flags = [
-    "--recreate-lock-file"
-    "--commit-lock-file"
-  ];
+  # system.autoUpgrade.flake = "git+file:///home/antwane/dev/nixframe";
+  # system.autoUpgrade.allowReboot = false;
+  # system.autoUpgrade.flags = [
+  #   "--recreate-lock-file"
+  #   "--commit-lock-file"
+  # ];
 
   # services.emacs.enable = true;
 
