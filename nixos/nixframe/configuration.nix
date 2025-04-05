@@ -133,11 +133,4 @@
       startAt = "hourly";
     };
   };
-
-  # do automatic garbage collection
-  nix.gc = {
-    options = "--delete-older-than 30d";
-    dates = "weekly";
-    automatic = true;
-  };
 }

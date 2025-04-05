@@ -2,6 +2,7 @@
   description = "Flake for dotfiles including NixOS and home-manager configuration";
 
   inputs = {
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -34,6 +35,7 @@
           ./nixos/nixframe/configuration.nix
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
           inputs.sops-nix.nixosModules.sops
+          inputs.determinate.nixosModules.default
           ({config, ...}: {
             system.configurationRevision = self.rev or "dirty";
             sops.defaultSopsFile = ./secrets/secrets.yaml;
