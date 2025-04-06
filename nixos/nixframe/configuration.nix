@@ -98,10 +98,6 @@
     })
   ];
 
-  # Added in order to temporarily workaround obsidian using insecure version of electron
-  nixpkgs.config.permittedInsecurePackages =
-    lib.optional (pkgs.obsidian.version == "1.5.3") "electron-25.9.0";
-
   services.printing = {
     enable = true;
     drivers = [pkgs.samsung-unified-linux-driver pkgs.brlaser];
