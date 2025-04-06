@@ -26,6 +26,7 @@
       st = "status --short";
       sw = ''        !f() { if [ $# -gt 0 ]; then git switch "$@"; else git branch --sort=-committerdate | 
                      fzf | xargs git switch; fi; }; f'';
+      bd = "branch -d";
     };
     extraConfig = {
       rerere.enable = true; # record resolved conflicts to reuse
