@@ -26,6 +26,8 @@
       st = "status --short";
       sw = ''        !f() { if [ $# -gt 0 ]; then git switch "$@"; else git branch --sort=-committerdate | 
                      fzf | xargs git switch; fi; }; f'';
+      me = ''        !f() { if [ $# -gt 0 ]; then git merge "$@"; else git branch --sort=-committerdate | 
+                     fzf | xargs git merge; fi; }; f'';
       bd = "branch -d";
     };
     extraConfig = {
