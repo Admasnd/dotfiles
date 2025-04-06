@@ -16,7 +16,17 @@
     nix-direnv.enable = true;
   };
   # let home-manager manage bash
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      ns = "sudo nixos-rebuild --flake . switch";
+      nb = "sudo nixos-rebuild --flake . build";
+      hs = "home-manager --flake . switch";
+      hb = "home-manager --flake . build";
+      ll = "ls -la";
+      fu = "nix flake update";
+    };
+  };
 
   home.username = "antwane";
   home.homeDirectory = "/home/antwane";
