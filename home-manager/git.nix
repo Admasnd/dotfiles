@@ -3,7 +3,10 @@
     enable = true;
     userName = "Antwane Mason";
     userEmail = "git@aimai.simplelogin.com";
-    aliases = {
+    aliases = let
+      fzf = x: ''        !f() { if [ $# -gt 0 ]; then git ${x} "$@"; else git branch --sort=-committerdate | 
+                         fzf | xargs git ${x}; fi; }; f'';
+    in {
       lol = "log --oneline --decorate";
       graph = "log --oneline --decorate --graph";
       rel = "reflog --date=iso";
@@ -24,11 +27,9 @@
       ri = ''        !f() { if [ $# -eq 0 ]; then set -- origin/main; fi; 
                      git rebase --interactive --keep-base "$@"; }; f'';
       st = "status --short";
-      sw = ''        !f() { if [ $# -gt 0 ]; then git switch "$@"; else git branch --sort=-committerdate | 
-                     fzf | xargs git switch; fi; }; f'';
-      me = ''        !f() { if [ $# -gt 0 ]; then git merge "$@"; else git branch --sort=-committerdate | 
-                     fzf | xargs git merge; fi; }; f'';
-      bd = "branch -d";
+      sw = fzf "switch";
+      me = fzf "merge";
+      bd = fzf "branch -d";
     };
     extraConfig = {
       rerere.enable = true; # record resolved conflicts to reuse
