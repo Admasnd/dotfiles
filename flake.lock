@@ -403,6 +403,21 @@
         "type": "github"
       }
     },
+    "private-dotfiles": {
+      "locked": {
+        "lastModified": 1744660372,
+        "narHash": "sha256-9gTapw6UKpWYxrYDG6xRmAnrZRH4C6TZjJYNtvQ+yQs=",
+        "ref": "refs/heads/master",
+        "rev": "1500c2566bcdf99472fbb0bcd29e579d70232ca1",
+        "revCount": 2,
+        "type": "git",
+        "url": "file:///home/antwane/dev/private-dotfiles"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/antwane/dev/private-dotfiles"
+      }
+    },
     "root": {
       "inputs": {
         "determinate": "determinate",
@@ -411,6 +426,7 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",
         "nvf": "nvf",
+        "private-dotfiles": "private-dotfiles",
         "sops-nix": "sops-nix"
       }
     },

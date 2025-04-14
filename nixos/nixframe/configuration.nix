@@ -1,12 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -78,10 +73,6 @@
   #   "--commit-lock-file"
   # ];
 
-  # services.emacs.enable = true;
-
-  # services.emacs.defaultEditor = true;
-
   # i18n.inputMethod.enabled = "ibus";
   # i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ mozc ];
 
@@ -101,32 +92,5 @@
   services.printing = {
     enable = true;
     drivers = [pkgs.samsung-unified-linux-driver pkgs.brlaser];
-  };
-
-  services.tailscale = {
-    enable = true;
-    # Need for using exit nodes
-    useRoutingFeatures = "client";
-  };
-  # Setup for MagicDNS support for Tailscale
-  networking.nameservers = ["100.100.100.100" "194.242.2.2" "8.8.8.8"];
-  networking.search = ["taild3fe6f.ts.net"];
-
-  services.borgbackup.jobs = {
-    borgbase = {
-      paths = ["/home/antwane"];
-      exclude = [
-        "**/target"
-        "**/result"
-        "Downloads"
-      ];
-      repo = "kk81t2b1@kk81t2b1.repo.borgbase.com:repo";
-      encryption = {
-        mode = "repokey-blake2";
-        passCommand = "cat ${config.sops.secrets.borgbase_pass.path}";
-      };
-      compression = "auto,lzma";
-      startAt = "hourly";
-    };
   };
 }

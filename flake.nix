@@ -18,6 +18,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    private-dotfiles.url = "git+file:///home/antwane/dev/private-dotfiles";
   };
 
   outputs = {
@@ -33,6 +34,7 @@
         inherit system;
         modules = [
           ./nixos/nixframe/configuration.nix
+          inputs.private-dotfiles.nixosModules.tailscale
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
           inputs.sops-nix.nixosModules.sops
           inputs.determinate.nixosModules.default
