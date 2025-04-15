@@ -66,12 +66,20 @@
   };
 
   # auto upgrade settings
-  # system.autoUpgrade.flake = "git+file:///home/antwane/dev/nixframe";
-  # system.autoUpgrade.allowReboot = false;
-  # system.autoUpgrade.flags = [
-  #   "--recreate-lock-file"
-  #   "--commit-lock-file"
-  # ];
+  system.autoUpgrade = {
+    enable = true;
+    flake = "git+file:///home/antwane/dev/dotfiles";
+    allowReboot = true;
+    dates = "daily";
+    rebootWindow = {
+      lower = "03:00";
+      upper = "05:00";
+    };
+    flags = [
+      "--recreate-lock-file"
+      "--commit-lock-file"
+    ];
+  };
 
   # i18n.inputMethod.enabled = "ibus";
   # i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ mozc ];
