@@ -46,7 +46,7 @@
     ++ (with pkgs; [
       # security tools
       yubioath-flutter
-      signal-desktop
+      signal-desktop-bin
       # web tools
       brave
       # mullvad-browser
