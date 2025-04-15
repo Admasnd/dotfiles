@@ -25,7 +25,7 @@
     enable = true;
     shellAliases = {
       ns = "sudo nixos-rebuild --flake . switch";
-      nb = "sudo nixos-rebuild --flake . build";
+      nb = "nixos-rebuild --flake . build";
       hs = "home-manager --flake . switch";
       hb = "home-manager --flake . build";
       ll = "ls -la";
