@@ -1,13 +1,16 @@
 {
   pkgs,
   nixpkgs-stable,
+  nvf,
   ...
 }: {
-  imports = [./git.nix];
-
-  nixpkgs.config.allowUnfree = true;
+  imports = [
+    nvf.homeManagerModules.default
+    ./git.nix
+  ];
 
   programs.home-manager.enable = true;
+
   # enables (un)loading environment variables by changing directories
   programs.direnv = {
     enable = true;

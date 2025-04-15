@@ -38,6 +38,13 @@
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
           inputs.sops-nix.nixosModules.sops
           inputs.determinate.nixosModules.default
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.antwane = ./home-manager/home.nix;
+            home-manager.extraSpecialArgs = inputs;
+          }
           ({config, ...}: {
             system.configurationRevision = self.rev or "dirty";
             sops.defaultSopsFile = ./secrets/secrets.yaml;
@@ -57,7 +64,6 @@
         };
 
         modules = [
-          inputs.nvf.homeManagerModules.default
           ./home-manager/home.nix
         ];
         extraSpecialArgs = inputs;
