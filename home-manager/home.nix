@@ -2,10 +2,12 @@
   pkgs,
   nixpkgs-stable,
   nvf,
+  private-dotfiles,
   ...
 }: {
   imports = [
     nvf.homeManagerModules.default
+    private-dotfiles.homeManagerModules.packages
     ./git.nix
   ];
 
@@ -40,7 +42,6 @@
       bitwarden
       yubikey-manager-qt
       sops
-      sparrow
       mullvad-browser
     ]
     ++ (with pkgs; [
@@ -49,7 +50,6 @@
       signal-desktop-bin
       # web tools
       brave
-      # mullvad-browser
       google-chrome
       tor-browser-bundle-bin
       thunderbird
@@ -58,13 +58,8 @@
       libreoffice
       # misc tools
       nerd-fonts.hack
-      makemkv
       findutils
       unzip
-      handbrake
-      (ffmpeg-full.override {
-        withUnfree = true;
-      })
       evtest # for keyboard input testing
       papis
       evince
@@ -115,9 +110,6 @@
       };
     };
   };
-  # home.file = {
-  #  ".emacs.d/init.el".source = ../../emacs/init.el;
-  # };
 
   # auto configure fonts installed via packages
   fonts.fontconfig.enable = true;
