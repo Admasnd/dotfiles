@@ -40,7 +40,7 @@
     [
       # security tools
       bitwarden
-      yubikey-manager-qt
+      yubioath-flutter
       sops
       mullvad-browser
     ]
