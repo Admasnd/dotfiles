@@ -37,42 +37,38 @@
   home.username = "antwane";
   home.homeDirectory = "/home/antwane";
 
-  home.packages = with nixpkgs-stable.legacyPackages.${pkgs.system};
-    [
-      # security tools
-      bitwarden
-      yubioath-flutter
-      sops
-      mullvad-browser
-    ]
-    ++ (with pkgs; [
-      # security tools
-      signal-desktop-bin
-      # web tools
-      brave
-      google-chrome
-      tor-browser-bundle-bin
-      thunderbird
-      protonmail-bridge
-      # writing tools
-      libreoffice
-      # misc tools
-      nerd-fonts.hack
-      findutils
-      unzip
-      evtest # for keyboard input testing
-      papis
-      evince
-      fzf
-      age
-      vorta
-      vlc
-      # programming
-      tmux
-      nodejs
-      rustup
-      radicle-node
-    ]);
+  home.packages = with pkgs; [
+    # security tools
+    bitwarden
+    yubioath-flutter
+    sops
+    mullvad-browser
+    signal-desktop-bin
+    # web tools
+    brave
+    google-chrome
+    tor-browser-bundle-bin
+    thunderbird
+    protonmail-bridge
+    # writing tools
+    libreoffice
+    # misc tools
+    nerd-fonts.hack
+    findutils
+    unzip
+    evtest # for keyboard input testing
+    papis
+    evince
+    fzf
+    age
+    vorta
+    vlc
+    # programming
+    tmux
+    nodejs
+    rustup
+    radicle-node
+  ];
 
   programs.nvf = {
     enable = true;
