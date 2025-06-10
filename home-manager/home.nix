@@ -114,6 +114,8 @@
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
   };
 
+  services.ssh-agent.enable = true;
+
   # auto configure fonts installed via packages
   fonts.fontconfig.enable = true;
 
