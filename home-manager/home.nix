@@ -3,6 +3,7 @@
   nixpkgs-stable,
   nvf,
   private-dotfiles,
+  config,
   ...
 }: {
   imports = [
@@ -46,7 +47,6 @@
     ]
     ++ (with pkgs; [
       # security tools
-      yubioath-flutter
       signal-desktop-bin
       # web tools
       brave
@@ -108,6 +108,10 @@
         };
       };
     };
+  };
+
+  home.sessionVariables = {
+    SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
   };
 
   # auto configure fonts installed via packages
