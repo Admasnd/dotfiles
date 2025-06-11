@@ -55,6 +55,13 @@
         ];
         specialArgs = {inherit inputs;};
       };
+      nixjoy = lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./nixos/nixjoy/configuration.nix
+          inputs.private-dotfiles.nixosModules.tailscale
+        ];
+      };
     };
     homeConfigurations = {
       antwane = inputs.home-manager.lib.homeManagerConfiguration {
