@@ -401,11 +401,11 @@
     },
     "private-dotfiles": {
       "locked": {
-        "lastModified": 1749675748,
-        "narHash": "sha256-IS+jjeWbJTJIJdULyr8E4L5N7ApPn7sdcrF7igFLDAg=",
+        "lastModified": 1749677864,
+        "narHash": "sha256-4F+z/7Gqqjru1nXT+Vr+2uRqpSx5O/pSnpQacJ1wtzg=",
         "ref": "refs/heads/master",
-        "rev": "03e5e55907dd662c9d37d8f0424bc6348fc137a2",
-        "revCount": 4,
+        "rev": "d81ce06bd7f5226e521b4fbe6144c8903f7b2290",
+        "revCount": 5,
         "type": "git",
         "url": "file:///home/antwane/dev/private-dotfiles"
       },
