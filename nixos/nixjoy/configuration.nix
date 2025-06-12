@@ -132,6 +132,11 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
   # List packages installed in system profile. To search, run: $ nix search wget
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default. wget
