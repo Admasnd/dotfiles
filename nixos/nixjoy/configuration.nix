@@ -14,15 +14,15 @@ in {
 
   services.sunshine.enable = true;
   # systemd.user.services.sunshine
-  systemd.user.services.sunshine.after = ["tailscaled.service"];
-  systemd.user.services.sunshine.requires = ["tailscaled.service"];
-  systemd.user.services.sunshine.preStart = ''
-    ${pkgs.tailscale}/bin/tailscale serve --bg --tcp ${toString port} ${toString port}
-  '';
-
-  systemd.user.services.sunshine.postStop = ''
-    ${pkgs.tailscale}/bin/tailscale serve --tcp ${toString port} off
-  '';
+  # systemd.user.services.sunshine.after = ["tailscaled.service"];
+  # systemd.user.services.sunshine.requires = ["tailscaled.service"];
+  # systemd.user.services.sunshine.preStart = ''
+  #   ${pkgs.tailscale}/bin/tailscale serve --bg --tcp ${toString port} ${toString port}
+  # '';
+  #
+  # systemd.user.services.sunshine.postStop = ''
+  #   ${pkgs.tailscale}/bin/tailscale serve --tcp ${toString port} off
+  # '';
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
