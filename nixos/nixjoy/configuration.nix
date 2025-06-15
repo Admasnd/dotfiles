@@ -12,7 +12,10 @@ in {
     ./hardware-configuration.nix
   ];
 
-  services.sunshine.enable = true;
+  services.sunshine = {
+    openFirewall = true;
+    enable = true;
+  };
   # systemd.user.services.sunshine
   # systemd.user.services.sunshine.after = ["tailscaled.service"];
   # systemd.user.services.sunshine.requires = ["tailscaled.service"];
