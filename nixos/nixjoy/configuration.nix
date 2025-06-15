@@ -14,6 +14,7 @@ in {
 
   services.sunshine = {
     openFirewall = true;
+    capSysAdmin = true;
     enable = true;
   };
   # systemd.user.services.sunshine
