@@ -16,6 +16,17 @@ in {
     openFirewall = true;
     capSysAdmin = true;
     enable = true;
+    applications = {
+      apps = [
+        {
+          name = "Steam Big Picture";
+          detached = [
+            "setsid steam steam://open/gamepadui"
+          ];
+          image-path = "steam.png";
+        }
+      ];
+    };
   };
   # systemd.user.services.sunshine
   # systemd.user.services.sunshine.after = ["tailscaled.service"];
