@@ -17,6 +17,7 @@ in {
     capSysAdmin = true;
     enable = true;
     applications = {
+      env.WAYLAND_DISPLAY = "gamescope-0";
       apps = [
         {
           name = "Steam Big Picture";
