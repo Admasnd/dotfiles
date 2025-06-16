@@ -17,12 +17,13 @@ in {
     capSysAdmin = true;
     enable = true;
     applications = {
-      env.WAYLAND_DISPLAY = "gamescope-0";
+      # env.WAYLAND_DISPLAY = "gamescope-0";
       apps = [
         {
           name = "Steam Big Picture";
           detached = [
-            "setsid steam steam://open/gamepadui"
+            "gamescope -f -- steam://open/gamepadui"
+            # "setsid gamescope -f -- steam -gamepadui"
           ];
           image-path = "steam.png";
         }
@@ -118,8 +119,9 @@ in {
     isNormalUser = true;
     extraGroups = ["audio" "video" "networkmanager" "gamemode"];
     hashedPassword = ""; # login without password
-    # packages = with pkgs; [
-    # ];
+    packages = with pkgs; [
+      gamescope
+    ];
   };
 
   # enable autologin
