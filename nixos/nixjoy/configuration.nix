@@ -23,9 +23,34 @@ in {
           name = "Steam Big Picture";
           detached = [
             "gamescope -f -- steam://open/gamepadui"
-            # "setsid gamescope -f -- steam -gamepadui"
           ];
           image-path = "steam.png";
+        }
+        {
+          name = "Steam Big Picture (Framework 13)";
+          detached = [
+            "gamescope -f -- steam://open/gamepadui"
+          ];
+          image-path = "steam.png";
+          prep-cmd = [
+            {
+              do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.2256x1504@66";
+              undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
+            }
+          ];
+        }
+        {
+          name = "Steam Big Picture (Steam Deck)";
+          detached = [
+            "gamescope -f -- steam://open/gamepadui"
+          ];
+          image-path = "steam.png";
+          prep-cmd = [
+            {
+              do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.1280x800@60";
+              undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
+            }
+          ];
         }
       ];
     };
