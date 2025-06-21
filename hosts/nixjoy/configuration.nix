@@ -1,12 +1,8 @@
-# Edit this configuration file to define what should be installed on your system.  Help is available in the configuration.nix(5) man page and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   config,
   pkgs,
-  lib,
   ...
-}: let
-  port = config.services.sunshine.settings.port;
-in {
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -16,87 +12,55 @@ in {
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   services.sunshine = {
-    # openFirewall = true;
     capSysAdmin = true;
     enable = true;
-    # applications = {
-    #   # env.WAYLAND_DISPLAY = "gamescope-0";
-    #   apps = [
-    #     {
-    #       name = "Steam Big Picture";
-    #       command = [
-    #         "steam steam://open/gamepadui"
-    #       ];
-    #       image-path = "steam.png";
-    #     }
-    #     {
-    #       name = "Steam Big Picture (Framework 13)";
-    #       detached = [
-    #         "setsid gamescope -f -W 2256 -H 1504 -r 66 -- steam -gamepadui"
-    #       ];
-    #       image-path = "steam.png";
-    #       # prep-cmd = [
-    #       #   {
-    #       #     do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.2256x1504@66";
-    #       #     undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
-    #       #   }
-    #       # ];
-    #     }
-    #     {
-    #       name = "Steam Big Picture (Steam Deck)";
-    #       detached = [
-    #         "setsid gamescope -f -W 1280 -H 800 -r 60 -- steam -gamepadui"
-    #       ];
-    #       image-path = "steam.png";
-    #       # prep-cmd = [
-    #       #   {
-    #       #     do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.1280x800@60";
-    #       #     undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
-    #       #   }
-    #       # ];
-    #     }
-    #   ];
-    # };
+    applications = {
+      apps = [
+        {
+          name = "TV";
+          prep-cmd = [
+            {
+              do = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 3840x2160@59.997 -c bt2100\"";
+              undo = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 3840x2160@240.084 -c bt2100\"";
+            }
+          ];
+          detached = [
+            "${pkgs.libcap}/bin/capsh --delamb=cap_sys_admin -- -c \"${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/gamepadui\""
+          ];
+          image-path = "steam.png";
+        }
+        {
+          name = "Laptop";
+          prep-cmd = [
+            {
+              do = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 2048x1152@59.909 -c bt2100\"";
+              undo = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 3840x2160@240.084 -c bt2100\"";
+            }
+          ];
+          detached = [
+            "${pkgs.libcap}/bin/capsh --delamb=cap_sys_admin -- -c \"${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/gamepadui\""
+          ];
+          image-path = "steam.png";
+          output = "/tmp/sunshine-steam-big-picture-log.txt";
+        }
+        {
+          name = "Steam Deck";
+          prep-cmd = [
+            {
+              do = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 1280x800@59.910 -c bt2100\"";
+              undo = "sh -c \"${pkgs.mutter}/bin/gdctl set -L -M DP-3 -p -m 3840x2160@240.084 -c bt2100\"";
+            }
+          ];
+          detached = [
+            "${pkgs.libcap}/bin/capsh --delamb=cap_sys_admin -- -c \"${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/gamepadui\""
+          ];
+          image-path = "steam.png";
+          output = "/tmp/sunshine-steam-big-picture-log.txt";
+        }
+      ];
+    };
   };
 
-  # systemd.user.services.sunshine = lib.mkMerge [
-  #   {
-  #     # requires = ["tailscaled.service" "network-online.target"];
-  #     # after = ["tailscaled.service" "network-online.target"];
-  #     # requires = ["sunshine.socket"];
-  #     # after = ["sunshine.socket"];
-  #     serviceConfig = {
-  #       PassEnvironment = [
-  #         "DISPLAY"
-  #         "WAYLAND_DISPLAY"
-  #         "XDG_RUNTIME_DIR"
-  #         "XDG_SESSION_TYPE"
-  #         "XDG_CURRENT_DESKTOP"
-  #       ];
-  #     };
-  #   }
-  # ];
-  #
-  # # # ListenStream=0.0.0.0:47989
-  # # systemd.sockets.sunshine = {
-  # #   requires = ["tailscaled.service" "network-online.target"];
-  # #   after = ["tailscaled.service" "network-online.target"];
-  # #   socketConfig.BindToDevice = "tailscale0";
-  # #   listenStreams = [
-  # #     "0.0.0.0:47984"
-  # #     "0.0.0.0:47989"
-  # #     "0.0.0.0:47990"
-  # #     "0.0.0.0:48010"
-  # #   ];
-  # #   listenDatagrams = [
-  # #     "0.0.0.0:47998"
-  # #     "0.0.0.0:47999"
-  # #     "0.0.0.0:48000"
-  # #     "0.0.0.0:48002"
-  # #     "0.0.0.0:48010"
-  # #   ];
-  # # };
-  # #
   # This is needed for sunshine service
   networking.firewall.interfaces."tailscale0".allowedTCPPorts = [47984 47989 47990 48010];
   networking.firewall.interfaces."tailscale0".allowedUDPPorts = [47998 47999 48000 48002 48010];
@@ -193,14 +157,6 @@ in {
     };
   };
 
-  # # Wayland compositor that runs a single, maximized app
-  # services.cage = {
-  #   enable = true;
-  #   user = "joy";
-  #   program = "${pkgs.steam}/bin/steam -gamepadui";
-  #   environment.WLR_LIBINPUT_NO_DEVICES = "1";
-  # };
-  #
   # Install firefox.
   programs.firefox.enable = true;
 
@@ -236,10 +192,6 @@ in {
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default. wget
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are started in user sessions. programs.mtr.enable = true; programs.gnupg.agent = {
-  #   enable = true; enableSSHSupport = true;
-  # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon. services.openssh.enable = true;
@@ -254,8 +206,6 @@ in {
   services.tailscale.extraUpFlags = [
     "--ssh"
   ];
-
-  # Open ports in the firewall. networking.firewall.allowedTCPPorts = [ ... ]; networking.firewall.allowedUDPPorts = [ ... ]; Or disable the firewall altogether. networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default settings for stateful data, like file locations and database versions on your system were taken. It‘s perfectly fine and recommended to leave this value at the release version of the first install of this system. Before changing this value read the documentation for this option (e.g. man configuration.nix or on
   # https://nixos.org/nixos/options.html).
