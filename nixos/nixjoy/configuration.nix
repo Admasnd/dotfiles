@@ -12,60 +12,94 @@ in {
     ./hardware-configuration.nix
   ];
 
+  # enable flakes support
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
   services.sunshine = {
-    openFirewall = true;
+    # openFirewall = true;
     capSysAdmin = true;
     enable = true;
-    applications = {
-      # env.WAYLAND_DISPLAY = "gamescope-0";
-      apps = [
-        {
-          name = "Steam Big Picture";
-          detached = [
-            "gamescope -f -- steam://open/gamepadui"
-          ];
-          image-path = "steam.png";
-        }
-        {
-          name = "Steam Big Picture (Framework 13)";
-          detached = [
-            "gamescope -f -- steam://open/gamepadui"
-          ];
-          image-path = "steam.png";
-          prep-cmd = [
-            {
-              do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.2256x1504@66";
-              undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
-            }
-          ];
-        }
-        {
-          name = "Steam Big Picture (Steam Deck)";
-          detached = [
-            "gamescope -f -- steam://open/gamepadui"
-          ];
-          image-path = "steam.png";
-          prep-cmd = [
-            {
-              do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.1280x800@60";
-              undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
-            }
-          ];
-        }
-      ];
-    };
+    # applications = {
+    #   # env.WAYLAND_DISPLAY = "gamescope-0";
+    #   apps = [
+    #     {
+    #       name = "Steam Big Picture";
+    #       command = [
+    #         "steam steam://open/gamepadui"
+    #       ];
+    #       image-path = "steam.png";
+    #     }
+    #     {
+    #       name = "Steam Big Picture (Framework 13)";
+    #       detached = [
+    #         "setsid gamescope -f -W 2256 -H 1504 -r 66 -- steam -gamepadui"
+    #       ];
+    #       image-path = "steam.png";
+    #       # prep-cmd = [
+    #       #   {
+    #       #     do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.2256x1504@66";
+    #       #     undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
+    #       #   }
+    #       # ];
+    #     }
+    #     {
+    #       name = "Steam Big Picture (Steam Deck)";
+    #       detached = [
+    #         "setsid gamescope -f -W 1280 -H 800 -r 60 -- steam -gamepadui"
+    #       ];
+    #       image-path = "steam.png";
+    #       # prep-cmd = [
+    #       #   {
+    #       #     do = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.1280x800@60";
+    #       #     undo = "${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.DP-4.mode.3840x2160@240";
+    #       #   }
+    #       # ];
+    #     }
+    #   ];
+    # };
   };
-  # systemd.user.services.sunshine
-  # systemd.user.services.sunshine.after = ["tailscaled.service"];
-  # systemd.user.services.sunshine.requires = ["tailscaled.service"];
-  # systemd.user.services.sunshine.preStart = ''
-  #   ${pkgs.tailscale}/bin/tailscale serve --bg --tcp ${toString port} ${toString port}
-  # '';
-  #
-  # systemd.user.services.sunshine.postStop = ''
-  #   ${pkgs.tailscale}/bin/tailscale serve --tcp ${toString port} off
-  # '';
 
+  # systemd.user.services.sunshine = lib.mkMerge [
+  #   {
+  #     # requires = ["tailscaled.service" "network-online.target"];
+  #     # after = ["tailscaled.service" "network-online.target"];
+  #     # requires = ["sunshine.socket"];
+  #     # after = ["sunshine.socket"];
+  #     serviceConfig = {
+  #       PassEnvironment = [
+  #         "DISPLAY"
+  #         "WAYLAND_DISPLAY"
+  #         "XDG_RUNTIME_DIR"
+  #         "XDG_SESSION_TYPE"
+  #         "XDG_CURRENT_DESKTOP"
+  #       ];
+  #     };
+  #   }
+  # ];
+  #
+  # # # ListenStream=0.0.0.0:47989
+  # # systemd.sockets.sunshine = {
+  # #   requires = ["tailscaled.service" "network-online.target"];
+  # #   after = ["tailscaled.service" "network-online.target"];
+  # #   socketConfig.BindToDevice = "tailscale0";
+  # #   listenStreams = [
+  # #     "0.0.0.0:47984"
+  # #     "0.0.0.0:47989"
+  # #     "0.0.0.0:47990"
+  # #     "0.0.0.0:48010"
+  # #   ];
+  # #   listenDatagrams = [
+  # #     "0.0.0.0:47998"
+  # #     "0.0.0.0:47999"
+  # #     "0.0.0.0:48000"
+  # #     "0.0.0.0:48002"
+  # #     "0.0.0.0:48010"
+  # #   ];
+  # # };
+  # #
+  # networking.firewall.interfaces."tailscale0".allowedTCPPorts = [47984 47989 47990 48010];
+  # networking.firewall.interfaces."tailscale0".allowedUDPPorts = [47998 47999 48000 48002 48010];
+  #
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -158,13 +192,14 @@ in {
     };
   };
 
-  # Wayland compositor that runs a single, maximized app
+  # # Wayland compositor that runs a single, maximized app
   # services.cage = {
   #   enable = true;
   #   user = "joy";
-  #   program = "${pkgs.steam}/bin/steam -bigpicture";
+  #   program = "${pkgs.steam}/bin/steam -gamepadui";
+  #   environment.WLR_LIBINPUT_NO_DEVICES = "1";
   # };
-
+  #
   # Install firefox.
   programs.firefox.enable = true;
 

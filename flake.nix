@@ -2,9 +2,9 @@
   description = "Flake for dotfiles including NixOS and home-manager configuration";
 
   inputs = {
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-sunshine.url = "github:Admasnd/nixpkgs/sunshine-update";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -12,7 +12,7 @@
     };
     nvf = {
       url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -37,7 +37,6 @@
           inputs.private-dotfiles.nixosModules.tailscale
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
           inputs.sops-nix.nixosModules.sops
-          inputs.determinate.nixosModules.default
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -60,6 +59,13 @@
         modules = [
           ./nixos/nixjoy/configuration.nix
           inputs.private-dotfiles.nixosModules.tailscale
+          # Override sunshine service with my fork
+          ({...}: {
+            # disabledModules = ["services/networking/sunshine.nix"];
+            # imports = [
+            #   "${inputs.nixpkgs-sunshine}/nixos/modules/services/networking/sunshine.nix"
+            # ];
+          })
         ];
       };
     };
