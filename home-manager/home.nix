@@ -71,42 +71,44 @@
     moonlight-qt
   ];
 
-  # programs.nvf = {
-  #   enable = true;
-  #   settings = {
-  #     vim = {
-  #       binds.whichKey.enable = true;
-  #       viAlias = true;
-  #       vimAlias = true;
-  #       lsp = {
-  #         enable = true;
-  #         mappings.nextDiagnostic = "]d";
-  #         mappings.previousDiagnostic = "[d";
-  #         formatOnSave = true;
-  #       };
-  #       languages = {
-  #         enableTreesitter = true;
-  #         enableFormat = true;
-  #         nix.enable = true;
-  #         lua.enable = true;
-  #         rust.enable = true;
-  #         markdown = {
-  #           enable = true;
-  #           extensions.render-markdown-nvim.enable = true;
-  #         };
-  #       };
-  #       statusline.lualine.enable = true;
-  #       telescope.enable = true;
-  #       telescope.setupOpts.defaults.layout_strategy = "center";
-  #       theme = {
-  #         enable = true;
-  #         name = "tokyonight";
-  #         style = "moon";
-  #       };
-  #     };
-  #   };
-  # };
-  #
+  programs.nvf = {
+    enable = true;
+    settings = {
+      vim = {
+        binds.whichKey.enable = true;
+        viAlias = true;
+        vimAlias = true;
+        lsp = {
+          enable = true;
+          mappings.nextDiagnostic = "]d";
+          mappings.previousDiagnostic = "[d";
+          formatOnSave = true;
+        };
+        languages = {
+          enableTreesitter = true;
+          enableFormat = true;
+	  html.enable = true;
+	  css.enable = true;
+          nix.enable = true;
+          lua.enable = true;
+          rust.enable = true;
+          markdown = {
+            enable = true;
+            extensions.render-markdown-nvim.enable = true;
+          };
+        };
+        statusline.lualine.enable = true;
+        telescope.enable = true;
+        telescope.setupOpts.defaults.layout_strategy = "center";
+        theme = {
+          enable = true;
+          name = "tokyonight";
+          style = "moon";
+        };
+      };
+    };
+  };
+
   home.sessionVariables = {
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
   };
