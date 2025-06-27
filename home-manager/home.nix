@@ -32,6 +32,9 @@
       ll = "ls -la";
       fu = "nix flake update";
     };
+    bashrcExtra = ''
+      . <( tailscale completion bash )
+    '';
   };
 
   home.username = "antwane";
