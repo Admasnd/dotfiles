@@ -87,6 +87,18 @@
           mappings.previousDiagnostic = "[d";
           formatOnSave = true;
         };
+        formatter.conform-nvim = {
+          enable = true;
+          setupOpts = {
+            format_on_save = {
+              lsp_format = "prefer";
+            };
+            formatters.prettier.command = "${pkgs.prettier}/bin/prettier";
+            formatters_by_ft = {
+              html = ["prettier"];
+            };
+          };
+        };
         languages = {
           enableTreesitter = true;
           enableFormat = true;
