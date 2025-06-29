@@ -90,10 +90,7 @@
         languages = {
           enableTreesitter = true;
           enableFormat = true;
-          html = {
-            enable = true;
-            treesitter.enable = true;
-          };
+          html.enable = true;
           css.enable = true;
           nix.enable = true;
           lua.enable = true;
