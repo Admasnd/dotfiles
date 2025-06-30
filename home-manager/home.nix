@@ -74,6 +74,7 @@
     radicle-node
     moonlight-qt
     typst
+    zellij
     roboto
     source-sans-pro
     font-awesome
