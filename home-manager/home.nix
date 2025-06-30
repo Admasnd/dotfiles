@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  nixpkgs-stable,
   nvf,
   private-dotfiles,
   config,
@@ -57,7 +56,6 @@
     # writing tools
     libreoffice
     # misc tools
-    nerd-fonts.hack
     findutils
     unzip
     evtest # for keyboard input testing
@@ -75,9 +73,6 @@
     moonlight-qt
     typst
     zellij
-    roboto
-    source-sans-pro
-    font-awesome
   ];
 
   programs.nvf = {

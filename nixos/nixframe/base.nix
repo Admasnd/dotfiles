@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # enable flakes support
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
@@ -54,6 +50,11 @@
     kochi-substitute
     source-code-pro
     ttf_bitstream_vera
+    roboto
+    source-sans-pro
+    source-sans
+    font-awesome
+    nerd-fonts.hack
   ];
 
   system.stateVersion = "22.05"; # Did you read the comment?
