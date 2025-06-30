@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   nixpkgs-stable,
   nvf,
   private-dotfiles,
@@ -72,6 +73,10 @@
     rustup
     radicle-node
     moonlight-qt
+    typst
+    roboto
+    source-sans-pro
+    font-awesome
   ];
 
   programs.nvf = {
@@ -127,6 +132,9 @@
 
   home.sessionVariables = {
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
+    TYPST_PACKAGE_PATHS = lib.makeSearchPath "share/typst/packages" [
+      pkgs.typstPackages.brilliant-cv
+    ];
   };
 
   # services.ssh-agent.enable = true;
