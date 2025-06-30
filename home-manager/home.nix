@@ -107,6 +107,7 @@
           nix.enable = true;
           lua.enable = true;
           rust.enable = true;
+          typst.enable = true;
           markdown = {
             enable = true;
             extensions.render-markdown-nvim.enable = true;
