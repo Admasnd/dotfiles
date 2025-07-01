@@ -5,8 +5,8 @@
     text = ''
       CAP=$(cat /sys/class/power_supply/BAT1/capacity)
       if [ "$CAP" -ge 80 ]; then
-         ectool chargecontrol discharge
-      elif [ "$CAP" -le 40 ]; then
+         ectool chargecontrol idle
+      else
          ectool chargecontrol normal
       fi
     '';
