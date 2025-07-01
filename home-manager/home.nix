@@ -94,11 +94,22 @@
             format_on_save = {
               lsp_format = "prefer";
             };
+            # stop formatter error from stopping write
+            default_format_opts = {
+              async = true;
+            };
             formatters.prettier.command = "${pkgs.prettier}/bin/prettier";
             formatters_by_ft = {
               html = ["prettier"];
             };
           };
+        };
+
+        diagnostics.nvim-lint = {
+          enable = true;
+          lint_after_save = true;
+          linters.tidy.cmd = "${pkgs.html-tidy}/bin/tidy";
+          linters_by_ft.html = ["tidy"];
         };
         languages = {
           enableTreesitter = true;
