@@ -97,8 +97,9 @@ in {
   # #   ];
   # # };
   # #
-  # networking.firewall.interfaces."tailscale0".allowedTCPPorts = [47984 47989 47990 48010];
-  # networking.firewall.interfaces."tailscale0".allowedUDPPorts = [47998 47999 48000 48002 48010];
+  # This is needed for sunshine service
+  networking.firewall.interfaces."tailscale0".allowedTCPPorts = [47984 47989 47990 48010];
+  networking.firewall.interfaces."tailscale0".allowedUDPPorts = [47998 47999 48000 48002 48010];
   #
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
