@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
-    nixpkgs-sunshine.url = "github:Admasnd/nixpkgs/sunshine-update";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -30,6 +29,17 @@
   } @ inputs: let
     system = "x86_64-linux";
     lib = nixpkgs.lib;
+    overlays = [
+      (final: prev: {
+        linux-firmware = prev.linux-firmware.overrideAttrs (old: rec {
+          version = "20250509";
+          src = prev.fetchzip {
+            url = "https://cdn.kernel.org/pub/linux/kernel/firmware/linux-firmware-${version}.tar.xz";
+            hash = "sha256-0FrhgJQyCeRCa3s0vu8UOoN0ZgVCahTQsSH0o6G6hhY=";
+          };
+        });
+      })
+    ];
   in {
     nixosConfigurations = {
       nixframe = lib.nixosSystem {
@@ -63,6 +73,7 @@
           inputs.private-dotfiles.nixosModules.tailscale
           # Override sunshine service with my fork
           ({...}: {
+            nixpkgs.overlays = overlays;
             # disabledModules = ["services/networking/sunshine.nix"];
             # imports = [
             #   "${inputs.nixpkgs-sunshine}/nixos/modules/services/networking/sunshine.nix"
