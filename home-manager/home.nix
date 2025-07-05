@@ -72,8 +72,16 @@
     radicle-node
     moonlight-qt
     typst
-    zellij
   ];
+
+  programs.zellij = {
+    enable = true;
+    enableBashIntegration = true;
+    attachExistingSession = true;
+    settings = {
+      copy_command = "${pkgs.xclip}/bin/xclip -selection clipboard";
+    };
+  };
 
   programs.nvf = {
     enable = true;
