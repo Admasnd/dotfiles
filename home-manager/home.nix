@@ -85,6 +85,7 @@
 
   programs.nvf = {
     enable = true;
+    enableManpages = true;
     settings = {
       vim = {
         binds.whichKey.enable = true;
