@@ -12,7 +12,7 @@
 
     nvf = {
       url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {

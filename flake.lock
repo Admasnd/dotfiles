@@ -162,7 +162,7 @@
         "mnw": "mnw",
         "nil": "nil",
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ],
         "systems": "systems_2"
       },
