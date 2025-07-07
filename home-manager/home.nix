@@ -130,7 +130,10 @@
           rust.enable = true;
           typst = {
             enable = true;
-            format.enable = true;
+            format = {
+              enable = true;
+              type = "typstyle";
+            };
           };
           markdown = {
             enable = true;
