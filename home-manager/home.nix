@@ -78,8 +78,11 @@
     enable = true;
     enableBashIntegration = true;
     attachExistingSession = true;
-    settings = {
-      copy_command = "${pkgs.xclip}/bin/xclip -selection clipboard";
+  };
+
+  home.file = {
+    ".config/zellij/config.kdl" = {
+      source = ./zellij/config.kdl;
     };
   };
 
