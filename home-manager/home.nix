@@ -99,6 +99,7 @@
           mappings.nextDiagnostic = "]d";
           mappings.previousDiagnostic = "[d";
           formatOnSave = true;
+          lspconfig.enable = true;
         };
         formatter.conform-nvim = {
           enable = true;
