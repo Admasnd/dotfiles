@@ -91,6 +91,13 @@
     enableManpages = true;
     settings = {
       vim = {
+        options = {
+          expandtab = true; # replace tabs with spaces
+          softtabstop = 2; # when combined with expandtab, will write two spaces when tab is used
+          shiftwidth = 4; # four spaces used with indenting
+          autoindent = true; # copy previous line indent when move to new line
+          smarttab = true; # use shiftwidth in front of line and softtabstop otherwise for tab and bksp
+        };
         binds.whichKey.enable = true;
         viAlias = true;
         vimAlias = true;
