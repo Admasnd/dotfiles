@@ -17,6 +17,7 @@ in {
 
   systemd.sleep.extraConfig = ''
     HibernateDelaySec=60min
+    MemorySleepMode=deep
   '';
 
   services.logind.lidSwitch = "suspend-then-hibernate";
@@ -25,12 +26,10 @@ in {
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "power";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "performance";
-      CPU_MIN_PERF_ON_AC = 0;
-      CPU_MAX_PERF_ON_AC = 100;
-      CPU_MIN_PERF_ON_BAT = 0;
-      CPU_MAX_PERF_ON_BAT = 20;
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      CPU_BOOST_ON_BAT = 0;
+      CPU_HWP_DYN_BOOST_ON_BAT = 0;
     };
   };
 
@@ -41,8 +40,8 @@ in {
   ];
 
   services.logind.extraConfig = ''
-    [Sleep]
-    SuspendState=deep
+    HandleSuspendKey=suspend-then-hibernate
+    HandleLidSwitch=suspend-then-hibernate
   '';
 
   powerManagement.powertop.enable = true;
@@ -61,4 +60,27 @@ in {
       OnUnitActiveSec = "5m";
     };
   };
+
+  systemd.services.conditional-hibernate = {
+    description = "Conditional hibernate based on AC power";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "conditional-hibernate" ''
+        if [ -f /sys/class/power_supply/AC*/online ]; then
+            AC_ONLINE=$(cat /sys/class/power_supply/AC*/online)
+            if [ "$AC_ONLINE" == '1' ]; then
+                echo "On AC power, skipping hibernation"
+                exit 0
+            fi
+        fi
+        # If not on AC power, proceed with hibernation
+        ${pkgs.systemd}/bin/systemctl hibernate
+      '';
+    };
+  };
+
+  # Override default hibernation with conditional logic
+  systemd.services.systemd-hibernate.serviceConfig.ExecStart = [
+    "${pkgs.systemd}/bin/systemctl start conditional-hibernate"
+  ];
 }
