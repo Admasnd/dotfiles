@@ -9,14 +9,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nvf = {
       url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     private-dotfiles.url = "git+file:///home/antwane/dev/private-dotfiles";
@@ -47,8 +41,8 @@
         modules = [
           ./nixos/nixframe/configuration.nix
           inputs.private-dotfiles.nixosModules.tailscale
+          inputs.private-dotfiles.nixosModules.backup
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
-          inputs.sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -56,13 +50,6 @@
             home-manager.users.antwane = ./home-manager/home.nix;
             home-manager.extraSpecialArgs = inputs;
           }
-          ({config, ...}: {
-            system.configurationRevision = self.rev or "dirty";
-            sops.defaultSopsFile = ./secrets/secrets.yaml;
-            sops.defaultSopsFormat = "yaml";
-            sops.age.keyFile = "/home/antwane/.config/sops/age/keys.txt";
-            sops.secrets.borgbase_pass = {};
-          })
         ];
         specialArgs = {inherit inputs;};
       };

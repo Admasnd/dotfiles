@@ -1,7 +1,11 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -102,5 +106,41 @@
   services.printing = {
     enable = true;
     drivers = [pkgs.samsung-unified-linux-driver pkgs.brlaser];
+  };
+
+  services.borgbackup.jobs.borgbase = {
+    paths = "/home/antwane";
+    exclude = ["*/Downloads" "*/result" "*/target"];
+    doInit = true;
+    encryption = {
+      mode = "repokey-blake2";
+      passCommand = lib.mkDefault "cat path";
+    };
+    environment.BORG_RSH = "ssh -i /root/.ssh/id_borgbase";
+    repo = lib.mkDefault "repo";
+    persistentTimer = true;
+    inhibitsSleep = true;
+    startAt = "hourly";
+    extraCreateArgs = ["--stats" "--verbose"];
+  };
+  services.borgbackup.jobs.localexternal = {
+    paths = "/home/antwane";
+    exclude = ["*/Downloads" "*/result" "*/target"];
+    doInit = true;
+    encryption = {
+      mode = "repokey-blake2";
+      passCommand = lib.mkDefault "cat path";
+    };
+
+    repo = "/run/media/antwane/FRAME-USB/borg";
+    inhibitsSleep = true;
+    extraCreateArgs = ["--stats" "--verbose"];
+    removableDevice = true;
+    startAt = "daily";
+    persistentTimer = true;
+  };
+
+  systemd.services.localexternal.serviceConfig = {
+    ConditionPathIsDirectory = "/run/media/antwane/FRAME-USB";
   };
 }
