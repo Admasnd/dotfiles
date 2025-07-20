@@ -44,6 +44,7 @@
     # security tools
     bitwarden
     yubioath-flutter
+    yubikey-manager
     sops
     mullvad-browser
     signal-desktop-bin
