@@ -14,6 +14,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     private-dotfiles.url = "git+file:///home/antwane/dev/private-dotfiles";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -35,6 +39,13 @@
       })
     ];
   in {
+    diskoConfigurations = {
+      nixframe = inputs.disko.lib.evalDisko {
+        modules = [
+          ./nixos/nixframe/nixframe-disko.nix
+        ];
+      };
+    };
     nixosConfigurations = {
       nixframe = lib.nixosSystem {
         inherit system;
