@@ -116,7 +116,7 @@
       mode = "repokey-blake2";
       passCommand = lib.mkDefault "cat path";
     };
-    environment.BORG_RSH = "ssh -i /root/.ssh/id_borgbase";
+    environment.BORG_RSH = "ssh -i /home/antwane/.ssh/id_borgbase";
     repo = lib.mkDefault "repo";
     persistentTimer = true;
     inhibitsSleep = true;

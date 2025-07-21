@@ -207,10 +207,10 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1753024132,
-        "narHash": "sha256-1VBr7iOwpeRWhSYLI0p3/LSFN9kjK8XaSpQchqxdybw=",
+        "lastModified": 1753126505,
+        "narHash": "sha256-WOJ8QSrjK0aGWqNLVXAR8YIt8Xle+QpCceUhQntrwsI=",
         "ref": "refs/heads/master",
-        "rev": "e62d028588dbc1a0015274dedd936fc1ba2fb118",
+        "rev": "6e4e8fb1430b1213792ce68b122311dfed550b6b",
         "revCount": 7,
         "type": "git",
         "url": "file:///home/antwane/dev/private-dotfiles"
