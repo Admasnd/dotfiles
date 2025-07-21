@@ -111,7 +111,7 @@
   services.borgbackup.jobs.borgbase = {
     paths = "/home/antwane";
     exclude = ["*/Downloads" "*/result" "*/target"];
-    doInit = true;
+    doInit = false;
     encryption = {
       mode = "repokey-blake2";
       passCommand = lib.mkDefault "cat path";
@@ -126,7 +126,7 @@
   services.borgbackup.jobs.localexternal = {
     paths = "/home/antwane";
     exclude = ["*/Downloads" "*/result" "*/target"];
-    doInit = true;
+    doInit = false;
     encryption = {
       mode = "repokey-blake2";
       passCommand = lib.mkDefault "cat path";
