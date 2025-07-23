@@ -13,30 +13,17 @@
     ./power.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-    enableCryptodisk = true;
-  };
+  boot.loader.systemd-boot.enable = true;
 
   # Needed for blueray drive to work with makemkv
   boot.kernelModules = ["sg"];
 
-  boot.initrd = {
-    luks.devices."root" = {
-      device = "/dev/disk/by-uuid/16f67ecf-126d-499e-a01e-8e1431c87664"; # UUID for /dev/nvme0n1p2
-      preLVM = true;
-      keyFile = "/keyfile.bin";
-      allowDiscards = true;
-    };
-    secrets = {
-      "keyfile.bin" = "/etc/secrets/initrd/keyfile.bin";
-    };
+  boot.initrd.luks.devices."crypted" = {
+    device = "/dev/disk/by-id/nvme-WD_BLACK_SN750_SE_500GB_21243B802086";
+    allowDiscards = true;
+    fallbackToPassword = true;
+    bypassWorkqueues = true;
   };
 
   networking.hostName = "nixframe"; # Define your hostname.
