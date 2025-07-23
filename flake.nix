@@ -79,6 +79,13 @@
           })
         ];
       };
+      iso = lib.nixosSystem {
+        inherit system;
+        modules = [
+          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+          ./nixos/iso/configuration.nix
+        ];
+      };
     };
     homeConfigurations = {
       antwane = inputs.home-manager.lib.homeManagerConfiguration {
@@ -92,6 +99,9 @@
         ];
         extraSpecialArgs = inputs;
       };
+    };
+    checks.x86_64-linux = {
+      home-manager = self.homeConfigurations.antwane.activationPackage;
     };
   };
 }
