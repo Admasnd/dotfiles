@@ -23,6 +23,8 @@
                 name = "crypted";
                 settings = {
                   allowDiscards = true;
+		  fallbackToPassword = true;
+		  bypassWorkqueues = true;
                 };
                 content = {
                   type = "btrfs";

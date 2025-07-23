@@ -19,13 +19,6 @@
   # Needed for blueray drive to work with makemkv
   boot.kernelModules = ["sg"];
 
-  boot.initrd.luks.devices."crypted" = {
-    device = "/dev/disk/by-id/nvme-WD_BLACK_SN750_SE_500GB_21243B802086";
-    allowDiscards = true;
-    fallbackToPassword = true;
-    bypassWorkqueues = true;
-  };
-
   networking.hostName = "nixframe"; # Define your hostname.
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
