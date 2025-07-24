@@ -14,7 +14,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-		mountOptions = [ "umask=0077" ];
+                mountOptions = ["umask=0077"];
               };
             };
             luks = {
@@ -24,8 +24,7 @@
                 name = "crypted";
                 settings = {
                   allowDiscards = true;
-		  fallbackToPassword = true;
-		  bypassWorkqueues = true;
+                  bypassWorkqueues = true;
                 };
                 content = {
                   type = "btrfs";
@@ -55,6 +54,9 @@
                     "swap" = {
                       mountpoint = "/.swapvol";
                       swap.swapfile.size = "32G";
+                      mountOptions = [
+                        "nodatacow"
+                      ];
                     };
                   };
                 };

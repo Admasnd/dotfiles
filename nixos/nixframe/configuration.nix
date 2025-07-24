@@ -15,9 +15,17 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
+  boot.initrd.systemd.enable = true;
 
   # Needed for blueray drive to work with makemkv
   boot.kernelModules = ["sg"];
+
+  swapDevices = [
+    {
+      device = "/.swapvol/swapfile";
+      size = 32 * 1024;
+    }
+  ];
 
   networking.hostName = "nixframe"; # Define your hostname.
 
@@ -122,5 +130,22 @@
 
   systemd.services.localexternal.serviceConfig = {
     ConditionPathIsDirectory = "/run/media/antwane/FRAME-USB";
+  };
+
+  security.pam.u2f = {
+    enable = true;
+    settings = {
+      pinverification = 1;
+      userpresence = 1;
+      authfile = lib.mkDefault null;
+      interactive = true;
+    };
+  };
+
+  security.pam.services = {
+    login.u2fAuth = true;
+    gdm.u2fAuth = true;
+    sudo.u2fAuth = true;
+    gdm-password.u2fAuth = true;
   };
 }

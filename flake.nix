@@ -46,9 +46,10 @@
           ./nixos/nixframe/configuration.nix
           inputs.private-dotfiles.nixosModules.tailscale
           inputs.private-dotfiles.nixosModules.backup
+          inputs.private-dotfiles.nixosModules.pam
           inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
-	  inputs.disko.nixosModules.disko
-	  ./nixos/nixframe/nixframe-disko.nix
+          inputs.disko.nixosModules.disko
+          ./nixos/nixframe/nixframe-disko.nix
           inputs.home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;

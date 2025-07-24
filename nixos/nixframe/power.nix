@@ -1,86 +1,64 @@
-{pkgs, ...}: let
-  controller = pkgs.writeShellApplication {
-    name = "fw-charge-controller";
-    runtimeInputs = [pkgs.fw-ectool];
-    text = ''
-      CAP=$(cat /sys/class/power_supply/BAT1/capacity)
-      if [ "$CAP" -ge 80 ]; then
-         ectool chargecontrol idle
-      else
-         ectool chargecontrol normal
-      fi
-    '';
-  };
-in {
-  # prevent overheating
-  services.thermald.enable = true;
-
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=60min
-    MemorySleepMode=deep
-  '';
-
-  services.logind.lidSwitch = "suspend-then-hibernate";
-
-  services.tlp = {
-    settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      CPU_BOOST_ON_BAT = 0;
-      CPU_HWP_DYN_BOOST_ON_BAT = 0;
-    };
-  };
+{pkgs, ...}: {
+  boot.resumeDevice = "/dev/mapper/crypted";
 
   boot.kernelParams = [
+    "resume=/dev/mapper/crypted"
+    "resume_offset=533760"
     "mem_sleep_default=deep" # use low-leakage S3
-    "intel_idle.max_cstate=9" # let cores reach deepest C-state
-    "pcie_aspm.policy=powersupersave"
   ];
 
-  services.logind.extraConfig = ''
-    HandleSuspendKey=suspend-then-hibernate
-    HandleLidSwitch=suspend-then-hibernate
+  systemd.sleep.extraConfig = ''
+    # Give the laptop 60 min in S3, then hibernate
+    HibernateDelaySec=3600
   '';
 
-  powerManagement.powertop.enable = true;
-
-  # controller service
-  systemd.services.fw-charge-controller = {
-    description = "Framework charge controller";
-    script = "${controller}/bin/fw-charge-controller";
+  services.logind = {
+    # Lid closed while on battery  ➜  suspend-then-hibernate
+    lidSwitch = "suspend-then-hibernate";
+    # Lid closed while on AC      ➜  do nothing
+    lidSwitchExternalPower = "ignore";
+    extraConfig = ''
+      HandlePowerKey=suspend-then-hibernate
+      HandlePowerKeyLongPress=poweroff
+      IdleActionSec=1800
+      IdleAction=suspend-then-hibernate
+    '';
   };
 
-  # run every 5 min
-  systemd.timers.fw-charge-controller = {
-    wantedBy = ["timers.target"];
-    timerConfig = {
-      OnBootSec = "5m";
-      OnUnitActiveSec = "5m";
-    };
+  services.desktopManager.gnome.extraGSettingsOverrides = ''
+    [org.gnome.settings-daemon.plugins.power]
+    sleep-inactive-ac-type='nothing'
+    sleep-inactive-battery-type='nothing'
+    sleep-inactive-battery-timeout=0
+    sleep-inactive-ac-timeout=0
+  '';
+
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
   };
 
-  systemd.services.conditional-hibernate = {
-    description = "Conditional hibernate based on AC power";
+  # Tag AC online/offline events so systemd can react
+  services.udev.extraRules = ''
+    SUBSYSTEM=="power_supply", ATTR{type}=="Mains", \
+        RUN+="${pkgs.systemd}/bin/systemctl start ac-event@$attr{online}.service"
+  '';
+
+  # busctl
+  systemd.services."ac-event@" = {
+    description = "Handle AC plug/unplug events (arg = 0/1)";
+    # One instance per event value (0 = on battery, 1 = on AC)
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "conditional-hibernate" ''
-        if [ -f /sys/class/power_supply/AC*/online ]; then
-            AC_ONLINE=$(cat /sys/class/power_supply/AC*/online)
-            if [ "$AC_ONLINE" == '1' ]; then
-                echo "On AC power, skipping hibernation"
-                exit 0
-            fi
-        fi
-        # If not on AC power, proceed with hibernation
-        ${pkgs.systemd}/bin/systemctl hibernate
-      '';
+      ExecStart = let
+        ac-event = pkgs.writeShellApplication {
+          name = "ac-event";
+          runtimeInputs = with pkgs; [logger systemd power-profiles-daemon];
+          text = builtins.readFile ./ac-handler.sh;
+        };
+      in "${ac-event}/bin/ac-event %i";
+      KillMode = "process";
     };
+    restartIfChanged = false;
   };
-
-  # Override default hibernation with conditional logic
-  systemd.services.systemd-hibernate.serviceConfig.ExecStart = [
-    "${pkgs.systemd}/bin/systemctl start conditional-hibernate"
-  ];
 }
