@@ -75,18 +75,6 @@
     typst
   ];
 
-  programs.zellij = {
-    enable = true;
-    enableBashIntegration = true;
-    attachExistingSession = true;
-  };
-
-  home.file = {
-    ".config/zellij/config.kdl" = {
-      source = ./zellij/config.kdl;
-    };
-  };
-
   programs.nvf = {
     enable = true;
     enableManpages = true;
