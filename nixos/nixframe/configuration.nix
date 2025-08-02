@@ -148,4 +148,9 @@
     sudo.u2fAuth = true;
     gdm-password.u2fAuth = true;
   };
+
+  services.kanata = {
+    enable = true;
+    keyboards.framework.configFile = ./laptop.kbd;
+  };
 }
