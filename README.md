@@ -40,3 +40,12 @@ ssh-keyscan -H <server>
 
 You can then set the hostkey declaratively using
 `services.openssh.knownHosts.<name>.publicKey`.
+
+# FIDO2 Unlock
+
+`systemd-cryptenroll` must be used to manually enroll FIDO2 key into LUKS2
+partition.
+
+The pam u2f module is used to login with the FIDO2 key. This can be
+declaratively set with NixOS. `pamu2fcfg` is used to get the public key to
+enroll the FIDO2 keys.
