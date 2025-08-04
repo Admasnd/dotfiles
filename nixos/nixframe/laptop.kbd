@@ -8,25 +8,27 @@
 
 ;; timeout for caps-word is 3 seconds
 (defvar cap-timeout 3000
-        hold-timeout 150
+        hold-timeout 150 
         tap-repress-timeout 150
         left-kb (` 1 3 4 5
                  q w f p b
-                 a r s t g
+                         g
                  z x c d v)
         right-kb (6 7 8 9 0 - = bks
                   j l u y ; [ ] \
-                  m n e i o ' ent
+                  m         ' ent
                   k h , . / ))
 
 (defalias capw (caps-word $cap-timeout))        
 
-;; lmod and rmod represent permissive hold with same side rule
+;; mod,lmod, and rmod represent chordal hold and permissive hold
+(deftemplate mod (tap-action hold-action tap-keys)
+    (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys))
 (deftemplate lmod (tap-action hold-action) 
-    (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $left-kb))
+    (t! mod $tap-action $hold-action $left-kb))
 
 (deftemplate rmod (tap-action hold-action) 
-    (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $right-kb))
+    (t! mod $tap-action $hold-action $right-kb))
 
 ;; Colemak DH Otholinear layout 
 ;; Caps lock switched to cap-word
