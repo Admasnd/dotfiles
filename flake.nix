@@ -83,32 +83,5 @@
         ];
       };
     };
-    homeConfigurations = {
-      antwane = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          config.allowUnfree = true;
-          inherit system;
-        };
-
-        modules = [
-          ./home-manager/home.nix
-        ];
-        extraSpecialArgs = inputs;
-      };
-      deck = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          config.allowUnfree = true;
-          inherit system;
-        };
-
-        modules = [
-          ./home-manager/antwane/home.nix
-        ];
-        extraSpecialArgs = inputs;
-      };
-    };
-    checks.x86_64-linux = {
-      home-manager = self.homeConfigurations.antwane.activationPackage;
-    };
   };
 }
