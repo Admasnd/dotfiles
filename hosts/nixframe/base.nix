@@ -2,6 +2,17 @@
   # enable flakes support
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  nix.optimise = {
+    automatic = true;
+    dates = ["weekly"];
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "monthly";
+    options = "--delete-older-than 14d";
+  };
+
   services.resolved.enable = true;
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.networkmanager.dns = "systemd-resolved";
