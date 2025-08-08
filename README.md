@@ -18,6 +18,9 @@ Deploy home-manger config:
 home-manager --flake . switch
 ```
 
+For the prior two deployment commands, you can use `--max-jobs auto` to build
+derivations in parallel based on the number of CPUs you have.
+
 # Tailscale
 
 We want to be able to access nixjoy over the internet safely.
@@ -49,3 +52,12 @@ partition.
 The pam u2f module is used to login with the FIDO2 key. This can be
 declaratively set with NixOS. `pamu2fcfg` is used to get the public key to
 enroll the FIDO2 keys.
+
+# Garbage Collection
+
+Do the following to manually garbage collect NixOS generations in the last two
+weeks.
+
+```bash
+nix-collect-garbage --delete-older-than 14d
+```
