@@ -6,20 +6,17 @@ In order to update flake:
 nix flake update
 ```
 
-Deploy NixOS config:
+Deploy NixOS config with parallelism
 
 ```bash
-sudo nixos-rebuild --flake . switch
+sudo nixos-rebuild --flake . switch -j auto
 ```
 
-Deploy home-manger config:
+NixOS Remote Deployment Example
 
 ```bash
-home-manager --flake . switch
+nixos-rebuild switch --flake .#nixjoy -j auto --ask-sudo-password --target-host admin@nixjoy --build-host admin@nixjoy
 ```
-
-For the prior two deployment commands, you can use `--max-jobs auto` to build
-derivations in parallel based on the number of CPUs you have.
 
 # Tailscale
 
