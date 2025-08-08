@@ -63,7 +63,7 @@
       nixjoy = lib.nixosSystem {
         inherit system;
         modules = [
-          ./nixos/nixjoy/configuration.nix
+          ./hosts/nixjoy/configuration.nix
           inputs.private-dotfiles.nixosModules.tailscale
           # Override sunshine service with my fork
           ({...}: {
@@ -79,7 +79,7 @@
         inherit system;
         modules = [
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
-          ./nixos/iso/configuration.nix
+          ./hosts/iso/configuration.nix
         ];
       };
     };
