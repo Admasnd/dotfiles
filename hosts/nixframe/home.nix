@@ -25,10 +25,10 @@
   programs.bash = {
     enable = true;
     shellAliases = {
-      ns = "sudo nixos-rebuild --flake . switch --max-jobs 4 --cores 8";
-      nb = "nixos-rebuild --flake . build --max-jobs 4 --cores 8";
-      hs = "home-manager --flake . switch --max-jobs 4 --cores 8";
-      hb = "home-manager --flake . build --max-jobs 4 --cores 8";
+      ns = "sudo nixos-rebuild --flake . switch --max-jobs auto";
+      nb = "nixos-rebuild --flake . build --max-jobs auto";
+      hs = "home-manager --flake . switch --max-jobs auto";
+      hb = "home-manager --flake . build --max-jobs auto";
       ll = "ls -la";
       fu = "nix flake update";
     };
