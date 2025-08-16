@@ -158,6 +158,7 @@
     TYPST_PACKAGE_PATH = lib.makeSearchPath "share/typst/packages" [
       pkgs.typstPackages.brilliant-cv
       pkgs.typstPackages.touying
+      pkgs.typstPackages.numbly
     ];
   };
 
