@@ -74,6 +74,7 @@
     moonlight-qt
     typst
     kanata
+    radicle-node
   ];
 
   programs.nvf = {
