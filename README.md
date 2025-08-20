@@ -1,3 +1,15 @@
+# Repo Info
+
+The github repo is now being used as a mirror as I have moved this repo to the
+Radicle network.
+
+On the Radicle network, this repo can be found with
+`rad:z3p3ybE6Vm6WedPNrB86msvw6ogBn`.
+
+The repo can also be viewed in your browser at:
+
+    https://app.radicle.xyz/nodes/rosa.radicle.xyz/rad:z3p3ybE6Vm6WedPNrB86msvw6ogBn
+
 # Usage Instructions
 
 In order to update flake:
