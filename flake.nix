@@ -64,5 +64,19 @@
         ];
       };
     };
+    devShells."${system}".pentest = let
+      pkgs = import nixpkgs {
+        inherit system;
+      };
+    in
+      pkgs.mkShell {
+        name = "pentest-env";
+
+        packages = with pkgs; [
+          nmap
+          wireshark
+          metasploit
+        ];
+      };
   };
 }
