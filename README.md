@@ -30,6 +30,12 @@ NixOS Remote Deployment Example
 nixos-rebuild switch --flake .#nixjoy -j auto --ask-sudo-password --target-host admin@nixjoy --build-host admin@nixjoy
 ```
 
+Running Pentest Development Shell
+
+```bash
+nix develop .#pentest
+```
+
 # Tailscale
 
 We want to be able to access nixjoy over the internet safely.
