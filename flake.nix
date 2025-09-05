@@ -76,6 +76,7 @@
           nmap
           wireshark
           metasploit
+          putty
         ];
       };
   };
