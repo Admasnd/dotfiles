@@ -1,0 +1,12 @@
+[papers]
+dir = ~/Documents/zettelkasten/references
+
+[settings]
+default-library = papers
+add-confirm = True
+add-edit = True
+auto-doctor = True
+doctor-keys-missing-keys-extend = ['year']
+picktool = fzf
+notes-name = notes.md
+

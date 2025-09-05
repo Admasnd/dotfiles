@@ -85,6 +85,8 @@
     ];
   };
 
+  xdg.configFile."papis/config".source = ./papis/config;
+
   # services.ssh-agent.enable = true;
 
   # auto configure fonts installed via packages
