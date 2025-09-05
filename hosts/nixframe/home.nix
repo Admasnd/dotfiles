@@ -77,7 +77,7 @@
   ];
 
   home.sessionVariables = {
-    SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
+    # SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
     TYPST_PACKAGE_PATH = lib.makeSearchPath "share/typst/packages" [
       pkgs.typstPackages.brilliant-cv
       pkgs.typstPackages.touying
