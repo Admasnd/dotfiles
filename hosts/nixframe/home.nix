@@ -58,6 +58,7 @@
     # misc tools
     findutils
     unzip
+    ripgrep
     evtest # for keyboard input testing
     papis
     evince
