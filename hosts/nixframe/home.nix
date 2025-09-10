@@ -1,14 +1,16 @@
 {
   pkgs,
   lib,
-  private-dotfiles,
-  config,
+  inputs,
   ...
 }: {
   imports = [
-    private-dotfiles.homeManagerModules.packages
+    inputs.private-dotfiles.homeManagerModules.packages
     ./git.nix
-    ./neovim.nix
+    (import ./neovim.nix {
+      inherit inputs;
+      inherit pkgs;
+    })
   ];
 
   programs.home-manager.enable = true;

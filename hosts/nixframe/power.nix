@@ -13,16 +13,16 @@
   '';
 
   services.logind = {
-    # Lid closed while on battery  ➜  suspend-then-hibernate
-    lidSwitch = "suspend-then-hibernate";
-    # Lid closed while on AC      ➜  do nothing
-    lidSwitchExternalPower = "ignore";
-    extraConfig = ''
-      HandlePowerKey=suspend-then-hibernate
-      HandlePowerKeyLongPress=poweroff
-      IdleActionSec=1800
-      IdleAction=suspend-then-hibernate
-    '';
+    settings.Login = {
+      # Lid closed while on battery  ➜  suspend-then-hibernate
+      HandleLidSwitch = "suspend-then-hibernate";
+      # Lid closed while on AC      ➜  do nothing
+      HandleLidSwitchExternalPower = "ignore";
+      HandlePowerKey = "suspend-then-hibernate";
+      HandlePowerKeyLongPress = "poweroff";
+      IdleActionSec = 1800;
+      IdleAction = "suspend-then-hibernate";
+    };
   };
 
   services.desktopManager.gnome.extraGSettingsOverrides = ''

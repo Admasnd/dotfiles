@@ -1,10 +1,10 @@
 {
   pkgs,
-  nvf,
+  inputs,
   ...
 }: {
   imports = [
-    nvf.homeManagerModules.default
+    inputs.nvf.homeManagerModules.default
   ];
 
   programs.nvf = {
