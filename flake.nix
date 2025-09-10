@@ -44,7 +44,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.antwane = ./hosts/nixframe/home.nix;
-            home-manager.extraSpecialArgs = inputs;
+            home-manager.extraSpecialArgs = {inherit inputs;};
           }
         ];
         specialArgs = {inherit inputs;};

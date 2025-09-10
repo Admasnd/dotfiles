@@ -166,4 +166,9 @@
     enable = true;
     keyboards.framework.configFile = ./laptop.kbd;
   };
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gnome];
+  };
 }
