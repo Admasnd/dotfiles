@@ -89,25 +89,24 @@
         utility.preview.markdownPreview.enable = true;
         autocomplete.blink-cmp.enable = true;
 
-        # startPlugins = ["plenary-nvim" pkgs.vimPlugins.papis-nvim];
-        # lazy.plugins."papis.nvim" = {
-        #   package = pkgs.vimPlugins.papis-nvim;
-        #   setupModule = "papis";
-        #   setupOpts = {enable_keymaps = true;};
-        #   ft = ["markdown" "typst"];
-        # };
+        # TODO figure out why pathlib-nvim has to be loaded this way
+        # TODO update documentation for use of luaPackages
         luaPackages = ["pathlib-nvim"];
-        extraPlugins = {
-          sqlite-lua = {
+        lazy.plugins = {
+          # TODO update docs to explain why plugin name has to have exact format
+          # that differs from extraPackages
+          "sqlite.lua" = {
             package = pkgs.vimPlugins.sqlite-lua;
+            lazy = true;
           };
-          nui-nvim = {
+          "nui.nvim" = {
             package = pkgs.vimPlugins.nui-nvim;
+            lazy = true;
           };
-          papis-nvim = {
+          "papis.nvim" = {
             package = pkgs.vimPlugins.papis-nvim;
-            setup = "require('papis').setup {}";
-            after = ["sqlite-lua" "nui-nvim"];
+            setupModule = "papis";
+            ft = ["markdown" "typst"];
           };
         };
       };
