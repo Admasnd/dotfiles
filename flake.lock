@@ -180,23 +180,6 @@
         "type": "github"
       }
     },
-    "papis-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1753640723,
-        "narHash": "sha256-MEQmq1nHXj5LVVT/2AOywwiiAO3D++s3fjGLzs3EmS4=",
-        "owner": "jghauser",
-        "repo": "papis.nvim",
-        "rev": "b10a86149d5fa2d024019e9249a20429ec427ffb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jghauser",
-        "ref": "v0.8.0",
-        "repo": "papis.nvim",
-        "type": "github"
-      }
-    },
     "private-dotfiles": {
       "inputs": {
         "sops-nix": "sops-nix"

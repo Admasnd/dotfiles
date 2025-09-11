@@ -19,6 +19,11 @@
           autoindent = true; # copy previous line indent when move to new line
           smarttab = true; # use shiftwidth in front of line and softtabstop otherwise for tab and bksp
         };
+        extraPackages = [
+          # yq-go needed for papis.nvim
+          pkgs.yq-go
+          pkgs.sqlite
+        ];
         binds.whichKey.enable = true;
         viAlias = true;
         vimAlias = true;
@@ -58,6 +63,7 @@
           html.enable = true;
           css.enable = true;
           nix.enable = true;
+          yaml.enable = true;
           lua.enable = true;
           rust.enable = true;
           typst = {
@@ -79,6 +85,30 @@
           enable = true;
           name = "tokyonight";
           style = "moon";
+        };
+        utility.preview.markdownPreview.enable = true;
+        autocomplete.blink-cmp.enable = true;
+
+        # startPlugins = ["plenary-nvim" pkgs.vimPlugins.papis-nvim];
+        # lazy.plugins."papis.nvim" = {
+        #   package = pkgs.vimPlugins.papis-nvim;
+        #   setupModule = "papis";
+        #   setupOpts = {enable_keymaps = true;};
+        #   ft = ["markdown" "typst"];
+        # };
+        luaPackages = ["pathlib-nvim"];
+        extraPlugins = {
+          sqlite-lua = {
+            package = pkgs.vimPlugins.sqlite-lua;
+          };
+          nui-nvim = {
+            package = pkgs.vimPlugins.nui-nvim;
+          };
+          papis-nvim = {
+            package = pkgs.vimPlugins.papis-nvim;
+            setup = "require('papis').setup {}";
+            after = ["sqlite-lua" "nui-nvim"];
+          };
         };
       };
     };
