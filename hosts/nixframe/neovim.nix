@@ -22,7 +22,6 @@
         extraPackages = [
           # yq-go needed for papis.nvim
           pkgs.yq-go
-          pkgs.sqlite
         ];
         binds.whichKey.enable = true;
         viAlias = true;
@@ -87,7 +86,10 @@
           style = "moon";
         };
         utility.preview.markdownPreview.enable = true;
-        autocomplete.blink-cmp.enable = true;
+        autocomplete.blink-cmp = {
+          enable = true;
+          setupOpts.completion.menu.auto_show = false;
+        };
 
         # TODO figure out why pathlib-nvim has to be loaded this way
         # TODO update documentation for use of luaPackages
