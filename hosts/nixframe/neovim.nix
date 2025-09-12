@@ -19,6 +19,14 @@
           autoindent = true; # copy previous line indent when move to new line
           smarttab = true; # use shiftwidth in front of line and softtabstop otherwise for tab and bksp
         };
+        keymaps = [
+          {
+            key = "<Esc><Esc>";
+            mode = "t";
+            silent = true;
+            action = "<C-\\><C-n>";
+          }
+        ];
         extraPackages = [
           # yq-go needed for papis.nvim
           pkgs.yq-go
@@ -26,6 +34,7 @@
         binds.whichKey.enable = true;
         viAlias = true;
         vimAlias = true;
+
         lsp = {
           enable = true;
           mappings.nextDiagnostic = "]d";
@@ -108,6 +117,7 @@
           "papis.nvim" = {
             package = pkgs.vimPlugins.papis-nvim;
             setupModule = "papis";
+            setupOpts.enable_keymaps = true;
             ft = ["markdown" "typst"];
           };
         };
