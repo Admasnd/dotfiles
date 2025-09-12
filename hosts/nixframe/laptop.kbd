@@ -45,7 +45,8 @@
     caps @capw               l (t! rmod i ralt)
     lsft esc                 ; (t! rmod o rmeta)
     rsft nop0                n k
-                             m h)
+    lmeta mlft                m h
+    lalt mrgt                lctl mmid)
 
 (defcfg
     log-layer-changes yes
