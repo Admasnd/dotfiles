@@ -68,6 +68,7 @@
     age
     vorta
     vlc
+    jq
     # programming
     tmux
     nodejs
