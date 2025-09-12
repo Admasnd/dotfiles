@@ -43,8 +43,8 @@
     v    d                   j (t! rmod n rsft) 
     b    v                   k (t! rmod e rctl)
     caps @capw               l (t! rmod i ralt)
-                             ; (t! rmod o rmeta)
-                             n k
+    lsft esc                 ; (t! rmod o rmeta)
+    rsft nop0                n k
                              m h)
 
 (defcfg
