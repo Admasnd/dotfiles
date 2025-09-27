@@ -95,6 +95,7 @@
           style = "moon";
         };
         utility.preview.markdownPreview.enable = true;
+        utility.oil-nvim.enable = true;
         autocomplete.blink-cmp = {
           enable = true;
           setupOpts.completion.menu.auto_show = false;
