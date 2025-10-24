@@ -2,127 +2,72 @@
   pkgs,
   inputs,
   ...
-}: {
-  imports = [
-    inputs.nvf.homeManagerModules.default
-  ];
-
-  programs.nvf = {
-    enable = true;
-    enableManpages = true;
-    settings = {
-      vim = {
-        options = {
-          expandtab = true; # replace tabs with spaces
-          softtabstop = 2; # when combined with expandtab, will write two spaces when tab is used
-          shiftwidth = 4; # four spaces used with indenting
-          autoindent = true; # copy previous line indent when move to new line
-          smarttab = true; # use shiftwidth in front of line and softtabstop otherwise for tab and bksp
-        };
-        keymaps = [
-          {
-            key = "<Esc><Esc>";
-            mode = "t";
-            silent = true;
-            action = "<C-\\><C-n>";
-          }
-        ];
-        extraPackages = [
-          # yq-go needed for papis.nvim
-          pkgs.yq-go
-        ];
-        binds.whichKey.enable = true;
-        viAlias = true;
-        vimAlias = true;
-
-        lsp = {
-          enable = true;
-          mappings.nextDiagnostic = "]d";
-          mappings.previousDiagnostic = "[d";
-          formatOnSave = true;
-          lspconfig.enable = true;
-        };
-        formatter.conform-nvim = {
-          enable = true;
-          setupOpts = {
-            format_on_save = {
-              lsp_format = "prefer";
-            };
-            # stop formatter error from stopping write
-            default_format_opts = {
-              async = true;
-            };
-            formatters.prettier.command = "${pkgs.prettier}/bin/prettier";
-            formatters_by_ft = {
-              html = ["prettier"];
-            };
-          };
-        };
-
-        diagnostics.nvim-lint = {
-          enable = true;
-          lint_after_save = true;
-          linters.tidy.cmd = "${pkgs.html-tidy}/bin/tidy";
-          linters_by_ft.html = ["tidy"];
-        };
-        languages = {
-          enableTreesitter = true;
-          enableFormat = true;
-          html.enable = true;
-          css.enable = true;
-          nix.enable = true;
-          yaml.enable = true;
-          lua.enable = true;
-          rust.enable = true;
-          typst = {
-            enable = true;
-            format = {
-              enable = true;
-              type = "typstyle";
-            };
-          };
-          markdown = {
-            enable = true;
-            extensions.render-markdown-nvim.enable = true;
-          };
-        };
-        statusline.lualine.enable = true;
-        telescope.enable = true;
-        telescope.setupOpts.defaults.layout_strategy = "center";
-        theme = {
-          enable = true;
-          name = "tokyonight";
-          style = "moon";
-        };
-        utility.preview.markdownPreview.enable = true;
-        utility.oil-nvim.enable = true;
-        autocomplete.blink-cmp = {
-          enable = true;
-          setupOpts.completion.menu.auto_show = false;
-        };
-
-        # TODO figure out why pathlib-nvim has to be loaded this way
-        # TODO update documentation for use of luaPackages
-        luaPackages = ["pathlib-nvim"];
-        lazy.plugins = {
-          # TODO update docs to explain why plugin name has to have exact format
-          # that differs from extraPackages
-          "sqlite.lua" = {
-            package = pkgs.vimPlugins.sqlite-lua;
-            lazy = true;
-          };
-          "nui.nvim" = {
-            package = pkgs.vimPlugins.nui-nvim;
-            lazy = true;
-          };
-          "papis.nvim" = {
-            package = pkgs.vimPlugins.papis-nvim;
-            setupModule = "papis";
-            setupOpts.enable_keymaps = true;
-            ft = ["markdown" "typst"];
-          };
-        };
-      };
-    };
+}:
+let
+  golf-vim = pkgs.vimUtils.buildVimPlugin {
+    name = "golf.vim";
+    src = inputs.golf-vim;
   };
+  one-small-step-for-vimkind = pkgs.vimUtils.buildVimPlugin {
+    name = "one-small-step-for-vimkind";
+    src = inputs.one-small-step-for-vimkind;
+  };
+in
+{
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+    extraPackages = with pkgs; [
+      cargo
+      fd
+      htmlhint # HTML linter
+      lua-language-server
+      marksman # Markdown LSP
+      nixd # Nix LSP
+      nixfmt # Nix formatter
+      prettierd # General formatter
+      ripgrep # for telescope
+      rust-analyzer # for Rust LSP support
+      rustc
+      rustfmt
+      tinymist # Typst lsp
+      typstyle # Typst formatter
+      vscode-langservers-extracted
+      yaml-language-server
+      yq-go # for papis.nvim
+    ];
+    plugins = with pkgs.vimPlugins; [
+      conform-nvim
+      golf-vim
+      lazydev-nvim
+      nord-vim
+      nvim-dap
+      nvim-dap-ui
+      nvim-dap-virtual-text
+      nvim-lint
+      nvim-lspconfig
+      nvim-treesitter
+      nvim-treesitter-parsers.css
+      nvim-treesitter-parsers.html
+      nvim-treesitter-parsers.lua
+      nvim-treesitter-parsers.markdown
+      nvim-treesitter-parsers.markdown_inline
+      nvim-treesitter-parsers.nix
+      nvim-treesitter-parsers.rust
+      nvim-treesitter-parsers.typst
+      nvim-treesitter-parsers.yaml
+      papis-nvim
+      oil-nvim
+      one-small-step-for-vimkind
+      render-markdown-nvim
+      telescope-nvim
+      telescope-fzf-native-nvim
+      typst-preview-nvim
+      which-key-nvim
+    ];
+  };
+
+  xdg.configFile."nvim".source = ./nvim;
 }

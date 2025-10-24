@@ -57,6 +57,22 @@
         "type": "github"
       }
     },
+    "golf-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1745767873,
+        "narHash": "sha256-lCzt+7/uZ/vvWnvWPIqjtS3G3w3qOhI7vHdSQ9bvMKU=",
+        "owner": "vuciv",
+        "repo": "golf",
+        "rev": "abf1bc0c1c4a5482b4a4b36b950b49aaa0f39e69",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vuciv",
+        "repo": "golf",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -180,6 +196,22 @@
         "type": "github"
       }
     },
+    "one-small-step-for-vimkind": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1760446293,
+        "narHash": "sha256-Re0lwbhHYfi+nqTux9GXFuWYRV4LMbN5LVffZLbo26U=",
+        "owner": "jbyuki",
+        "repo": "one-small-step-for-vimkind",
+        "rev": "8fdbb4ed7bd20f92d3c1344b1e619af9017c743d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jbyuki",
+        "repo": "one-small-step-for-vimkind",
+        "type": "github"
+      }
+    },
     "private-dotfiles": {
       "inputs": {
         "sops-nix": "sops-nix"
@@ -201,11 +233,13 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "golf-vim": "golf-vim",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "nvf": "nvf",
+        "one-small-step-for-vimkind": "one-small-step-for-vimkind",
         "private-dotfiles": "private-dotfiles"
       }
     },

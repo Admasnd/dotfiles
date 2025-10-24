@@ -3,7 +3,8 @@
   lib,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.private-dotfiles.homeManagerModules.packages
     ./git.nix
@@ -72,7 +73,6 @@
     # programming
     tmux
     nodejs
-    rustup
     radicle-node
     moonlight-qt
     typst
