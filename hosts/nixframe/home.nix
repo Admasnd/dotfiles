@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    inputs.private-dotfiles.homeManagerModules.packages
+    # inputs.private-dotfiles.homeManagerModules.packages
     ./git.nix
     (import ./neovim.nix {
       inherit inputs;
@@ -44,7 +44,7 @@
 
   home.packages = with pkgs; [
     # security tools
-    bitwarden
+    bitwarden-desktop
     yubioath-flutter
     yubikey-manager
     sops
@@ -53,7 +53,7 @@
     # web tools
     brave
     google-chrome
-    tor-browser-bundle-bin
+    tor-browser
     thunderbird
     protonmail-bridge
     # writing tools
@@ -63,7 +63,7 @@
     unzip
     ripgrep
     evtest # for keyboard input testing
-    papis
+    inputs.nixpkgs-stable.legacyPackages.x86_64-linux.papis
     evince
     fzf
     age
