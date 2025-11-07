@@ -31,7 +31,7 @@ vim.o.splitright = true -- :vsplit will default to the right of current window
 vim.o.timeoutlen = 300  -- Decrease mapped sequence wait time
 vim.o.updatetime = 250  -- Decrease time without typing before swap file written to disk
 
--- Section: Autocommands (Excluding LSP)
+-- Section: Autocommands (Excluding LSP & Plugins)
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
@@ -39,6 +39,22 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function()
         vim.hl.on_yank()
     end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+    desc = 'Try to start treesitter when open new file',
+    group = vim.api.nvim_create_augroup('myconfig-treesitter-start', { clear = true }),
+    callback = function(args)
+        -- try to run treesitter if filetype supports it
+        pcall(function() vim.treesitter.start(args.buf) end)
+    end
+})
+vim.api.nvim_create_autocmd('BufNew', {
+    desc = 'Enable spell checking when opening new buffer',
+    group = vim.api.nvim_create_augroup('myconfig-start-spell', { clear = true }),
+    callback = function(args)
+        vim.o.spelllang = 'en_us'
+        vim.o.spell = true
+    end
 })
 
 -- Section: LSP Configuration
@@ -169,13 +185,14 @@ end, {
 -- Section: typst-preview Setup
 require("typst-preview").setup {}
 
-
 -- Section: nvim-lint Setup
 require("lint").linters_by_ft = {
     html = { 'htmlhint' },
 }
 -- done as post rather than pre because some linters require file to be written to disk first
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    desc = 'Automatically run linter on save',
+    group = vim.api.nvim_create_augroup('myconfig-auto-lint-on-save', { clear = true }),
     callback = function()
         -- try_lint without arguments runs the linters defined in `linters_by_ft`
         -- for the current filetype
