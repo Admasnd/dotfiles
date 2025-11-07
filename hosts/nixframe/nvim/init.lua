@@ -10,6 +10,7 @@ end
 vim.cmd('colorscheme nord')
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' ' -- buffer local leader
+vim.go.cmdheight = 2       -- use two screen lines to have space for modeline and hardtime.nvim message
 vim.o.autoindent = true    -- copy previous line indent when move to new line
 vim.o.breakindent = true   -- line wrapped text appear visually indented same level as line
 vim.o.confirm = true       -- raise a dialog to save rather than fail command due to unsaved changes
@@ -181,3 +182,6 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         require("lint").try_lint()
     end,
 })
+
+-- Section: hardtime.nvim Setup
+require("hardtime").setup {}

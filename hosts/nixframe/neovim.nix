@@ -41,6 +41,7 @@ in
     plugins = with pkgs.vimPlugins; [
       conform-nvim
       golf-vim
+      hardtime-nvim
       lazydev-nvim
       nord-vim
       nvim-dap
