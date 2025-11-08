@@ -41,11 +41,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
-    desc = 'Try to start treesitter when open new file',
+    desc = 'Start treesitter and configure folding',
     group = vim.api.nvim_create_augroup('myconfig-treesitter-start', { clear = true }),
     callback = function(args)
-        -- try to run treesitter if filetype supports it
-        pcall(function() vim.treesitter.start(args.buf) end)
+        if require("nvim-treesitter.parsers").has_parser() then
+            vim.treesitter.start(args.buf)
+            vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+            vim.wo.foldmethod = 'expr'
+            vim.go.foldlevelstart = 0 -- start with all folds closed
+        end
     end
 })
 vim.api.nvim_create_autocmd('BufNew', {
