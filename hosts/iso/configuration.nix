@@ -1,14 +1,18 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   nixpkgs.config.allowUnfree = true;
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   networking.hostName = "iso";
 
   environment.systemPackages = with pkgs; [
     neovim
     borgbackup
-    bitwarden
+    bitwarden-desktop
     brave
     git
     disko
