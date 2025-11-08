@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd('FileType', {
             vim.treesitter.start(args.buf)
             vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
             vim.wo.foldmethod = 'expr'
-            vim.go.foldlevelstart = 0 -- start with all folds closed
+            vim.wo.foldlevel = 99 -- default is to keep folds open
         end
     end
 })
