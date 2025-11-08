@@ -7,7 +7,7 @@
         name = "Antwane Mason";
         email = "git@aimai.simplelogin.com";
       };
-      aliases =
+      alias =
         let
           fzf = x: ''
             !f() { if [ $# -gt 0 ]; then git ${x} "$@"; else git branch --sort=-committerdate |
@@ -41,8 +41,8 @@
           me = fzf "merge";
           bd = fzf "branch -d";
         };
-      rerere.enable = true; # record resolved conflicts to reuse
-      merge.conflictstyle = "diff3"; # give context of original in addition to conflicting changes
+      rerere.enabled = true; # record resolved conflicts to reuse
+      merge.conflictStyle = "diff3"; # give context of original in addition to conflicting changes
       core.eol.text = "auto"; # auto detect end-of-line
       pull.ff = "only"; # only do fast forward merges on pull
       rebase.updateRefs = true; # enables rebasing whole branch stack with one command
