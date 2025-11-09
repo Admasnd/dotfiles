@@ -21,6 +21,7 @@ in
     vimdiffAlias = true;
     extraPackages = with pkgs; [
       cargo
+      emmet-language-server # for html and css
       fd
       htmlhint # HTML linter
       lua-language-server
@@ -34,7 +35,6 @@ in
       rustfmt
       tinymist # Typst lsp
       typstyle # Typst formatter
-      vscode-langservers-extracted
       yaml-language-server
       yq-go # for papis.nvim
     ];
