@@ -206,3 +206,20 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 
 -- Section: hardtime.nvim Setup
 require("hardtime").setup {}
+
+-- Section mini.ai Setup
+local spec_treesitter = require('mini.ai').gen_spec.treesitter
+require('mini.ai').setup {
+    custom_textobjects = {
+        ['='] = spec_treesitter({ a = '@assignment.outer', i = '@assignment.inner' }),
+        a = spec_treesitter({ a = '@parameter.outer', i = '@parameter.inner' }),
+        A = spec_treesitter({ a = '@attribute.outer', i = '@attribute.inner' }),
+        b = spec_treesitter({ a = '@block.outer', i = '@block.inner' }),
+        c = spec_treesitter({ a = '@comment.outer', i = '@comment.inner' }),
+        f = spec_treesitter({ a = '@call.outer', i = '@call.inner' }),
+        F = spec_treesitter({ a = '@function.outer', i = '@function.inner' }),
+    }
+}
+
+-- Section mini.surround Setup
+require('mini.surround').setup {}

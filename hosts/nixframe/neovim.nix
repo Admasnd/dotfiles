@@ -43,6 +43,8 @@ in
       golf-vim
       hardtime-nvim
       lazydev-nvim
+      mini-ai
+      mini-surround
       nord-vim
       nvim-dap
       nvim-dap-ui
@@ -59,6 +61,7 @@ in
       nvim-treesitter-parsers.rust
       nvim-treesitter-parsers.typst
       nvim-treesitter-parsers.yaml
+      nvim-treesitter-textobjects
       papis-nvim
       oil-nvim
       one-small-step-for-vimkind
