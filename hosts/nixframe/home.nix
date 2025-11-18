@@ -70,6 +70,9 @@
     vorta
     vlc
     jq
+    zoxide # cd alternative
+    yazi # file manager tui
+    fd # find replacement
     # programming
     tmux
     nodejs
