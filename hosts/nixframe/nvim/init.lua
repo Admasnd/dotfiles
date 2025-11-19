@@ -55,7 +55,8 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('BufNew', {
     desc = 'Enable spell checking when opening new buffer',
     group = vim.api.nvim_create_augroup('myconfig-start-spell', { clear = true }),
-    callback = function(args)
+    callback = function()
+        vim.o.spellfile = vim.fn.expand("~/.local/share/nvim/spell/en.utf-8.add")
         vim.o.spelllang = 'en_us'
         vim.o.spell = true
     end
