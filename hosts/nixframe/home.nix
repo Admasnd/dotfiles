@@ -36,6 +36,7 @@
     };
     bashrcExtra = ''
       . <( tailscale completion bash )
+      . <(zoxide init bash) 
     '';
   };
 
