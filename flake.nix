@@ -6,6 +6,7 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-parts.url = "github:hercules-ci/flake-parts";
     golf-vim = {
       url = "github:vuciv/golf";
       flake = false;
@@ -29,6 +30,7 @@
     {
       self,
       nixpkgs,
+      flake-parts,
       ...
     }@inputs:
     let
@@ -36,92 +38,95 @@
       lib = nixpkgs.lib;
       pkgs = nixpkgs.legacyPackages.${system};
     in
-    {
-      nixosConfigurations = {
-        nixframe = lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/nixframe/configuration.nix
-            inputs.private-dotfiles.nixosModules.tailscale
-            inputs.private-dotfiles.nixosModules.backup
-            inputs.private-dotfiles.nixosModules.pam
-            inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
-            inputs.disko.nixosModules.disko
-            ./hosts/nixframe/nixframe-disko.nix
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.antwane = ./hosts/nixframe/home.nix;
-              home-manager.extraSpecialArgs = { inherit inputs; };
-            }
-          ];
-          specialArgs = { inherit inputs; };
-        };
-        nixjoy = lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./hosts/nixjoy/configuration.nix
-            inputs.private-dotfiles.nixosModules.tailscale
-          ];
-        };
-        iso = lib.nixosSystem {
-          inherit system;
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
-            ./hosts/iso/configuration.nix
-          ];
-        };
-      };
-      devShells."${system}".pentest =
-        let
-          pkgs = import nixpkgs {
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      flake = {
+        nixosConfigurations = {
+          nixframe = lib.nixosSystem {
             inherit system;
+            modules = [
+              ./hosts/nixframe/configuration.nix
+              inputs.private-dotfiles.nixosModules.tailscale
+              inputs.private-dotfiles.nixosModules.backup
+              inputs.private-dotfiles.nixosModules.pam
+              inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
+              inputs.disko.nixosModules.disko
+              ./hosts/nixframe/nixframe-disko.nix
+              inputs.home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.antwane = ./hosts/nixframe/home.nix;
+                home-manager.extraSpecialArgs = { inherit inputs; };
+              }
+            ];
+            specialArgs = { inherit inputs; };
           };
-        in
-        pkgs.mkShell {
-          name = "pentest-env";
-
-          packages = with pkgs; [
-            nmap
-            wireshark
-            metasploit
-            putty
-          ];
+          nixjoy = lib.nixosSystem {
+            inherit system;
+            modules = [
+              ./hosts/nixjoy/configuration.nix
+              inputs.private-dotfiles.nixosModules.tailscale
+            ];
+          };
+          iso = lib.nixosSystem {
+            inherit system;
+            modules = [
+              "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+              ./hosts/iso/configuration.nix
+            ];
+          };
         };
-      checks.${system} = nixpkgs.lib.genAttrs (builtins.attrNames self.nixosConfigurations) (
-        host: self.nixosConfigurations.${host}.config.system.build.toplevel
-      );
-      packages.${system} = {
-        upgrade = pkgs.writeShellApplication {
-          name = "nixos-upgrade";
+        devShells."${system}".pentest =
+          let
+            pkgs = import nixpkgs {
+              inherit system;
+            };
+          in
+          pkgs.mkShell {
+            name = "pentest-env";
 
-          runtimeInputs = with pkgs; [
-            git
-            mktemp
-          ];
-          text = ''
-            FLAKE_LOCK=$(mktemp)
-            REPO_PATH=/home/antwane/dev/dotfiles
+            packages = with pkgs; [
+              nmap
+              wireshark
+              metasploit
+              putty
+            ];
+          };
+        checks.${system} = nixpkgs.lib.genAttrs (builtins.attrNames self.nixosConfigurations) (
+          host: self.nixosConfigurations.${host}.config.system.build.toplevel
+        );
+        packages.${system} = {
+          upgrade = pkgs.writeShellApplication {
+            name = "nixos-upgrade";
 
-            cleanup() {
-              rm -f "$FLAKE_LOCK"
-            }
-            trap cleanup EXIT INT TERM
+            runtimeInputs = with pkgs; [
+              git
+              mktemp
+            ];
+            text = ''
+              FLAKE_LOCK=$(mktemp)
+              REPO_PATH=/home/antwane/dev/dotfiles
 
-            cd "$REPO_PATH"
-            nix flake update --output-lock-file "$FLAKE_LOCK"
-            if cmp --silent -- "$FLAKE_LOCK" "flake.lock"; then
-              exit 0
-            fi
-            nix flake check --reference-lock-file "$FLAKE_LOCK"
-            chown "$(stat -c '%U:%G' flake.lock)" "$FLAKE_LOCK"
-            chmod "$(stat -c '%a' flake.lock)" "$FLAKE_LOCK"
-            mv "$FLAKE_LOCK" flake.lock
-            git add flake.lock
-            git commit --author "root <root@localhost>" -m "flake: update"
-            nixos-rebuild switch --flake .
-          '';
+              cleanup() {
+                rm -f "$FLAKE_LOCK"
+              }
+              trap cleanup EXIT INT TERM
+
+              cd "$REPO_PATH"
+              nix flake update --output-lock-file "$FLAKE_LOCK"
+              if cmp --silent -- "$FLAKE_LOCK" "flake.lock"; then
+                exit 0
+              fi
+              nix flake check --reference-lock-file "$FLAKE_LOCK"
+              chown "$(stat -c '%U:%G' flake.lock)" "$FLAKE_LOCK"
+              chmod "$(stat -c '%a' flake.lock)" "$FLAKE_LOCK"
+              mv "$FLAKE_LOCK" flake.lock
+              git add flake.lock
+              git commit --author "root <root@localhost>" -m "flake: update"
+              nixos-rebuild switch --flake .
+            '';
+          };
         };
       };
     };
