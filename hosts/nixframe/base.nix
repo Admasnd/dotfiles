@@ -1,10 +1,14 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # enable flakes support
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   nix.optimise = {
     automatic = true;
-    dates = ["weekly"];
+    dates = [ "weekly" ];
   };
 
   nix.gc = {
@@ -17,9 +21,6 @@
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.networkmanager.dns = "systemd-resolved";
 
-  # Set your time zone.
-  time.timeZone = "America/Indiana/Indianapolis";
-
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Enable the X11 windowing system.
@@ -29,23 +30,12 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
-  # Enable sound.
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-  services.pulseaudio.enable = false;
-
   nixpkgs.config.allowUnfree = true;
 
   services.yubikey-agent.enable = true;
   # enable use of Smart card mode (CCID) of Yubikey
   services.pcscd.enable = true;
-  services.udev.packages = [pkgs.yubikey-personalization];
+  services.udev.packages = [ pkgs.yubikey-personalization ];
 
   # system.autoUpgrade.enable = true;
 
@@ -68,5 +58,4 @@
     nerd-fonts.hack
   ];
 
-  system.stateVersion = "22.05"; # Did you read the comment?
 }
