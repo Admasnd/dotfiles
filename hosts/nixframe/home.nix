@@ -75,6 +75,7 @@
     yazi # file manager tui
     fd # find replacement
     # programming
+    jujutsu # better git
     tmux
     nodejs
     radicle-node
