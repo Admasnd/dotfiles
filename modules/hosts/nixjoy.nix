@@ -7,7 +7,11 @@
   # TODO create a disko configuration for nixjoy and test backup and restore
   # TODO backup game saves and game data
   den.aspects.nixjoy = {
-    includes = [ den.aspects.gaming ];
+    includes = with den.aspects; [
+      keyboards._.voyager
+      gaming
+    ];
+
     nixos =
       {
         pkgs,
