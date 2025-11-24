@@ -49,7 +49,6 @@
           signal-desktop-bin
           # web tools
           brave
-          google-chrome
           tor-browser
           thunderbird
           protonmail-bridge
