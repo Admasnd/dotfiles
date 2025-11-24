@@ -68,6 +68,7 @@
           zoxide # cd alternative
           yazi # file manager tui
           fd # find replacement
+          ghostty
           # programming
           jujutsu # better git
           tmux
