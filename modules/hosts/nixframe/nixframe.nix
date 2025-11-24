@@ -5,6 +5,8 @@
     {
       includes = with den.aspects; [
         backup
+        # Enables importing home-manager module and wiring up user aspect
+        den._.home-manager
         git
         keyboards._.laptop
         keyboards._.voyager
@@ -32,13 +34,6 @@
             inputs.private-dotfiles.nixosModules.pam
             inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
             inputs.disko.nixosModules.disko
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.antwane = aspect.homeManager;
-              home-manager.extraSpecialArgs = { inherit inputs; };
-            }
           ];
 
           services.printing = {
