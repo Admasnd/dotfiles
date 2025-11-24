@@ -11,6 +11,7 @@
           ui = {
             default-command = "log";
             editor = "nvim";
+            diff-editor = "vimdirdiff";
             merge-editor = "vimdiff";
             # TODO add vimdirdiff tool
           };
