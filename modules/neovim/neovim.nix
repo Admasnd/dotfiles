@@ -15,8 +15,22 @@
           name = "one-small-step-for-vimkind";
           src = inputs.one-small-step-for-vimkind;
         };
+        vimdirdiff = pkgs.writeShellApplication {
+          name = "vimdirdiff";
+          text = ''
+            #!/bin/bash
+            # On Mac OS, you may need to replace `/bin/bash` with `/bin/zsh`.
+
+            # Shell-escape each path:
+            DIR1=$(printf '%q' "$1"); shift
+            DIR2=$(printf '%q' "$1"); shift
+            # Setting the colorscheme is optional
+            vim "$@" -c "DirDiff $DIR1 $DIR2"
+          '';
+        };
       in
       {
+        home.packages = [ vimdirdiff ];
         programs.neovim = {
           enable = true;
           viAlias = true;
@@ -43,6 +57,7 @@
           ];
           plugins = with pkgs.vimPlugins; [
             conform-nvim
+            vim-dirdiff
             golf-vim
             hardtime-nvim
             lazydev-nvim
