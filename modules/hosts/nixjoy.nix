@@ -35,6 +35,9 @@
         services.displayManager.gdm.enable = true;
         services.desktopManager.gnome.enable = true;
 
+        # Change default session to gamescope
+        services.displayManager.defaultSession = "steam";
+
         # Configure keymap in X11
         services.xserver.xkb = {
           layout = "us";
@@ -64,9 +67,6 @@
             "gamemode"
           ];
           hashedPassword = ""; # login without password
-          packages = with pkgs; [
-            gamescope
-          ];
         };
 
         # enable autologin
@@ -88,6 +88,11 @@
           defaultEditor = true;
         };
 
+        programs.gamescope = {
+          enable = true;
+          # this enables gamescope to increase priority of process for the process scheduler
+          capSysNice = true;
+        };
         programs.steam = {
           enable = true;
           package = pkgs.steam.override { extraPkgs = pkgs: with pkgs; [ mangohud ]; };
