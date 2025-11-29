@@ -26,6 +26,8 @@
             merge-tool-edits-conflict-markers = true;
           };
           templates.draft_commit_description = ''
+            builtin_draft_commit_description
+            ++
             "JJ: Commit Message Template
             JJ: 
             JJ: Format: <type>(<scope>): <subject>
@@ -44,11 +46,7 @@
             JJ: Issues closed: #
             JJ: Related PRs: #" 
             ++
-            concat(
-              builtin_draft_commit_description,
-              "\nJJ: ignore-rest\n",
-              diff.git(),
-            )
+            diff.git()
           '';
         };
       };
