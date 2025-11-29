@@ -88,11 +88,9 @@
           defaultEditor = true;
         };
 
-        programs.gamescope = {
-          enable = true;
-          # this enables gamescope to increase priority of process for the process scheduler
-          capSysNice = true;
-        };
+        # this enables gamescope to increase priority of process for the process scheduler
+        programs.gamescope.capSysNice = true;
+
         programs.steam = {
           enable = true;
           package = pkgs.steam.override { extraPkgs = pkgs: with pkgs; [ mangohud ]; };
