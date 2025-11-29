@@ -36,6 +36,17 @@
             inputs.disko.nixosModules.disko
           ];
 
+          nixpkgs.config.allowUnfreePredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "steam-unwrapped"
+              "steam"
+            ];
+
+          programs.steam = {
+            enable = true;
+          };
+
           services.printing = {
             enable = true;
             drivers = [

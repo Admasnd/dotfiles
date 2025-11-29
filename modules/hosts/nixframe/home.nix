@@ -42,6 +42,13 @@
         home.username = "antwane";
         home.homeDirectory = "/home/antwane";
 
+        nixpkgs.config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (lib.getName pkg) [
+            "steam-unwrapped"
+            "steam"
+          ];
+
         home.packages = with pkgs; [
           # security tools
           bitwarden-desktop
