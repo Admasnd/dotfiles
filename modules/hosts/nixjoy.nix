@@ -9,12 +9,11 @@
   den.aspects.nixjoy = {
     includes = with den.aspects; [
       keyboards._.voyager
-      gaming
+      (gaming [ "joy" ])
     ];
 
     nixos =
       {
-        pkgs,
         config,
         lib,
         modulesPath,
@@ -26,6 +25,11 @@
           (modulesPath + "/installer/scan/not-detected.nix")
         ];
 
+        gaming = {
+          gamescope.enable = true;
+          remotePlay.enable = true;
+        };
+
         boot.loader.systemd-boot.enable = true;
         boot.loader.efi.canTouchEfiVariables = true;
 
@@ -34,9 +38,6 @@
         # Enable the GNOME Desktop Environment.
         services.displayManager.gdm.enable = true;
         services.desktopManager.gnome.enable = true;
-
-        # Change default session to gamescope
-        services.displayManager.defaultSession = "steam";
 
         # Configure keymap in X11
         services.xserver.xkb = {
@@ -88,23 +89,10 @@
           defaultEditor = true;
         };
 
-        # this enables gamescope to increase priority of process for the process scheduler
-        programs.gamescope.capSysNice = true;
-
-        programs.steam = {
-          enable = true;
-          package = pkgs.steam.override { extraPkgs = pkgs: with pkgs; [ mangohud ]; };
-          gamescopeSession.enable = true;
-        };
-
-        programs.gamemode.enable = true;
-
         environment.variables = {
           VISUAL = config.programs.neovim.package;
           SUDO_EDITOR = config.programs.neovim.package;
         };
-        # Allow unfree packages
-        nixpkgs.config.allowUnfree = true;
 
         systemd.targets.sleep.enable = false;
         systemd.targets.suspend.enable = false;
