@@ -44,9 +44,9 @@
             JJ: Breaking changes (if any):
             JJ: 
             JJ: Issues closed: #
-            JJ: Related PRs: #" 
+            JJ: Related PRs: #\n" 
             ++
-            diff.git()
+            indent("JJ: ", diff.git())
           '';
         };
       };
