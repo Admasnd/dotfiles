@@ -1,6 +1,16 @@
 {
   den.aspects.jujutsu.homeManager =
     { pkgs, ... }:
+    let
+      jjPush = pkgs.writeShellApplication {
+        name = "jujutsu-push";
+        runtimeInputs = with pkgs; [ jujutsu ];
+        text = ''
+          SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock jj git push
+          jj git push --remote rad
+        '';
+      };
+    in
     {
       # tool for verifying commits have conventional commit format,
       # bumping semantic versioning, and generating changelog
@@ -8,6 +18,18 @@
       programs.jujutsu = {
         enable = true;
         settings = {
+          aliases = {
+            bm = [
+              "bookmark"
+              "move"
+              "master"
+            ];
+            gp = [
+              "util"
+              "exec"
+              "${jjPush}/bin/jujutsu-push"
+            ];
+          };
           ui = {
             default-command = "log";
             editor = "nvim";
