@@ -10,6 +10,7 @@
     includes = with den.aspects; [
       keyboards._.voyager
       (gaming [ "joy" ])
+      vm
     ];
 
     nixos =
@@ -28,6 +29,12 @@
         gaming = {
           gamescope.enable = true;
           remotePlay.enable = true;
+        };
+
+        vm = {
+          cores = 2;
+          vmPort = 5930;
+          memorySize = 8192;
         };
 
         boot.loader.systemd-boot.enable = true;
