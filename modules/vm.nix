@@ -55,7 +55,7 @@
               # disable-ticketing disables password authentication for
               # SPICE connection but we will be using ssh for securing connection
               options = [
-                "-spice port=${config.vm.vmPort},addr=0.0.0.0,disable-ticketing"
+                "-spice port=${builtins.toString config.vm.vmPort},addr=0.0.0.0,disable-ticketing"
               ];
             };
 
