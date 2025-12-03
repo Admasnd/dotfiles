@@ -3,6 +3,7 @@
     programs.git = {
       enable = true;
       settings = {
+        init.defaultBranch = "main";
         user = {
           name = "Antwane Mason";
           email = "git@aimai.simplelogin.com";
