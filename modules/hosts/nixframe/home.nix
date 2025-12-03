@@ -8,6 +8,11 @@
       papis
     ];
 
+    nixos = {
+      # necessary for bash to completion
+      environment.pathsToLink = [ "/share/bash-completion" ];
+    };
+
     homeManager =
       {
         pkgs,
@@ -25,6 +30,7 @@
         # let home-manager manage bash
         programs.bash = {
           enable = true;
+          enableCompletion = true;
           shellAliases = {
             ns = "sudo nixos-rebuild --flake . switch --max-jobs auto";
             nb = "nixos-rebuild --flake . build --max-jobs auto";
