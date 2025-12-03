@@ -123,6 +123,8 @@ require("conform").setup {
         timeout_ms = 500,
     },
     formatters_by_ft = {
+        css = { "prettierd" },
+        html = { "prettierd" },
         nix = { "nixfmt" },
         markdown = { "prettierd" },
         typst = { "typstyle" },
