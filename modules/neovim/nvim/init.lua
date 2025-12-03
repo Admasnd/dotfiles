@@ -9,16 +9,18 @@ end
 -- Section: Commands & Options
 vim.cmd('colorscheme nord')
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' ' -- buffer local leader
-vim.go.cmdheight = 2       -- use two screen lines to have space for modeline and hardtime.nvim message
-vim.o.autoindent = true    -- copy previous line indent when move to new line
-vim.o.breakindent = true   -- line wrapped text appear visually indented same level as line
-vim.o.confirm = true       -- raise a dialog to save rather than fail command due to unsaved changes
-vim.o.cursorline = true    -- visually highlight line cursor is on
-vim.o.expandtab = true     -- replace tabs with spaces
-vim.o.helpheight = 0       -- turn off minimum help height so it defaults to half the current window
+vim.g.maplocalleader = ' '               -- buffer local leader
+vim.go.cmdheight = 2                     -- use two screen lines to have space for modeline and hardtime.nvim message
+vim.go.completeopt = 'fuzzy,menu,popup'  -- add fuzzy matching to builtin insertion mode completion
+vim.go.wildoptions = 'fuzzy,pum,tagfile' -- add fuzzy matching to cmdline completion
+vim.o.autoindent = true                  -- copy previous line indent when move to new line
+vim.o.breakindent = true                 -- line wrapped text appear visually indented same level as line
+vim.o.confirm = true                     -- raise a dialog to save rather than fail command due to unsaved changes
+vim.o.cursorline = true                  -- visually highlight line cursor is on
+vim.o.expandtab = true                   -- replace tabs with spaces
+vim.o.helpheight = 0                     -- turn off minimum help height so it defaults to half the current window
 vim.o.ignorecase = true
-vim.o.inccommand = 'split' -- Preview substitutions live, as you type!
+vim.o.inccommand = 'split'               -- Preview substitutions live, as you type!
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.scrolloff = 10    -- Minimal number of screen lines to keep above and below the cursor.
