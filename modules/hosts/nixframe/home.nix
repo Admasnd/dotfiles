@@ -39,6 +39,22 @@
           '';
         };
 
+        # for bash vi editing mode and also other tools that use readline
+        programs.readline = {
+          enable = true;
+          extraConfig = ''
+            # Enable vi editing mode
+            set editing-mode vi
+
+            # Show current mode in prompt
+            set show-mode-in-prompt on
+
+            # Customize mode indicators (optional)
+            set vi-ins-mode-string "\1\e[34;1m\2[I]\1\e[0m\2 "
+            set vi-cmd-mode-string "\1\e[33;1m\2[N]\1\e[0m\2 "
+          '';
+        };
+
         home.username = "antwane";
         home.homeDirectory = "/home/antwane";
 
