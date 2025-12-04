@@ -5,6 +5,7 @@
       backup
       # Enables importing home-manager module and wiring up user aspect
       den._.home-manager
+      devenv
       (gaming [ "antwane" ])
       git
       keyboards._.laptop
