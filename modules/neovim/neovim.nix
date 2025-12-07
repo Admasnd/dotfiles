@@ -51,6 +51,7 @@
             rustc
             rustfmt
             tinymist # Typst lsp
+            typescript-language-server
             typstyle # Typst formatter
             yaml-language-server
             yq-go # for papis.nvim

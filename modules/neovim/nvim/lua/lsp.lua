@@ -46,3 +46,6 @@ vim.lsp.config('emmet_language_server', {
     },
 })
 vim.lsp.enable('emmet_language_server')
+
+-- Section Javascript/Typescript Support
+vim.lsp.enable('ts_ls')
