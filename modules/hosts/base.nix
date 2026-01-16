@@ -1,6 +1,10 @@
+{ inputs, ... }:
 {
-  # Settings shared across hosts
-  den.default.nixos = {
+  flake.modules.nixos.base = {
+    imports = [
+      inputs.disko.nixosModules.disko
+    ];
+
     nix.optimise = {
       automatic = true;
       dates = [ "weekly" ];
@@ -53,22 +57,15 @@
       "flakes"
     ];
 
-    # Enable networking
-
-    # Set your time zone.
-
-    # Select internationalisation properties.
-
     # Enable sound with pipewire.
     services.pipewire = {
       enable = true;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      # If you want to use JACK applications, uncomment this jack.enable = true;
-
-      # use the example session manager (no others are packaged yet so this is enabled by default, no need to redefine it in your config for now)
-      #media-session.enable = true;
     };
+
+    # necessary for bash to completion
+    environment.pathsToLink = [ "/share/bash-completion" ];
   };
 }

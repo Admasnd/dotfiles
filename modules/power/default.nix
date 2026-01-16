@@ -1,5 +1,5 @@
 {
-  den.aspects.power =
+  flake.modules.nixos.power =
     { pkgs, ... }:
     {
       boot.resumeDevice = "/dev/mapper/crypted";

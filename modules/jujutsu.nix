@@ -1,5 +1,5 @@
 {
-  den.aspects.jujutsu.homeManager =
+  flake.modules.homeManager.jujutsu =
     { pkgs, ... }:
     let
       jjPush = pkgs.writeShellApplication {

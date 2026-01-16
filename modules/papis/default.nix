@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  den.aspects.papis.homeManager = {
+  flake.modules.homeManager.papis = {
     home.packages = [
       inputs.nixpkgs-stable.legacyPackages.x86_64-linux.papis
     ];
