@@ -8,6 +8,7 @@
         "resume=/dev/mapper/crypted"
         "resume_offset=533760"
         "mem_sleep_default=deep" # use low-leakage S3
+        "usbcore.autosuspend=-1" # prevent usb devices from being suspended
       ];
 
       systemd.sleep.extraConfig = ''
