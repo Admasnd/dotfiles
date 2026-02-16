@@ -10,6 +10,7 @@
     ./jujutsu.nix
     ./keyboards
     ./neovim
+    ./nostr.nix
     ./papis
     ./pentest.nix
     ./power
