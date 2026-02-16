@@ -81,7 +81,7 @@
         (mkIf cfg.steam.enable {
           assertions = [
             {
-              assertion = !(builtins.isNull cfg.steam.gameModeUser);
+              assertion = !(isNull cfg.steam.gameModeUser);
               message = ''
                 admasnd.dotfiles.steam.gameModeUser must be set when
                 admasnd.dotfiles.steam.enable is true'';

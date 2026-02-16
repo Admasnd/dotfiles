@@ -6,7 +6,7 @@ let
     mkIf
     mkOption
     ;
-  inherit (lib.types) str path nullOr;
+  inherit (lib.types) path nullOr;
   pathNotInStore = lib.mkOptionType {
     name = "pathNotInStore";
     description = "path not in the Nix store";

@@ -93,7 +93,6 @@ in
         moonlight-qt
         typst
         radicle-node
-        vial
       ];
 
       home.sessionVariables = {
