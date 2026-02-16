@@ -227,3 +227,8 @@ require('mini.ai').setup {
 
 -- Section mini.surround Setup
 require('mini.surround').setup {}
+
+-- Section lean Setup
+require('lean').setup {
+    mapping = true,
+}

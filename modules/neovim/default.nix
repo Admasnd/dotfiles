@@ -59,6 +59,7 @@
           golf-vim
           hardtime-nvim
           lazydev-nvim
+          lean-nvim
           mini-ai
           mini-surround
           nord-vim

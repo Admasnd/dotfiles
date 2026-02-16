@@ -127,6 +127,7 @@ in
         gaming
         udev
         kanata
+        nostr
         sops
         power
         tailscale
@@ -135,7 +136,10 @@ in
 
       admasnd.dotfiles = {
         backup = {
-          paths = "/home/antwane";
+          paths = [
+            "/home/antwane"
+            "/var/lib/nostr-rs-relay"
+          ];
           exclude = [
             "*/Downloads"
             "*/result"
@@ -196,6 +200,7 @@ in
         home-manager
         xclip
         fw-ectool
+        elan
       ];
 
       # installs framework laptop firmware manager
