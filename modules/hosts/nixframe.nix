@@ -63,7 +63,7 @@ in
         bitwarden-desktop
         sops
         mullvad-browser
-        signal-desktop-bin
+        signal-desktop
         # web tools
         brave
         tor-browser

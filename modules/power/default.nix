@@ -11,10 +11,8 @@
         "usbcore.autosuspend=-1" # prevent usb devices from being suspended
       ];
 
-      systemd.sleep.extraConfig = ''
-        # Give the laptop 60 min in S3, then hibernate
-        HibernateDelaySec=3600
-      '';
+      # Give the laptop 60 min in S3, then hibernate
+      systemd.sleep.settings.Sleep.HibernateDelaySec = 3600;
 
       services.logind = {
         settings.Login = {
