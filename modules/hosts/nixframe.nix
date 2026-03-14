@@ -63,6 +63,7 @@ in
         bitwarden-desktop
         sops
         mullvad-browser
+        chromium
         signal-desktop
         # web tools
         brave
