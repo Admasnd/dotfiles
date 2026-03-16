@@ -173,11 +173,22 @@
           persistentTimer = true;
         };
 
+        systemd.services.borgbackup-job-borgbase.serviceConfig = {
+          KillSignal = "SIGINT";
+          TimeoutStopSec = "10min";
+          FinalKillSignal = "SIGKILL";
+        };
+
         systemd.services.borgbackup-job-localexternal = {
           unitConfig = {
             After = cfg.localRepoMount;
             BindsTo = cfg.localRepoMount;
             ConditionPathIsDirectory = cfg.localRepo;
+          };
+          serviceConfig = {
+            KillSignal = "SIGINT";
+            TimeoutStopSec = "10min";
+            FinalKillSignal = "SIGKILL";
           };
           wantedBy = [ cfg.localRepoMount ];
         };
