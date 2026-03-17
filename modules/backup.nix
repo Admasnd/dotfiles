@@ -164,12 +164,12 @@
           };
           repo = cfg.localRepo;
           inhibitsSleep = true;
+          startAt = cfg.startAt;
           extraCreateArgs = [
             "--stats"
             "--verbose"
           ];
           removableDevice = true;
-          startAt = [ ];
           persistentTimer = true;
         };
 
@@ -199,7 +199,6 @@
             BindsTo = cfg.localRepoMount;
           };
           wantedBy = [ cfg.localRepoMount ];
-          timerConfig.OnUnitActiveSec = cfg.startAt;
         };
       };
     };
