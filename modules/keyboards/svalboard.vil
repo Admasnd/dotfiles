@@ -1097,12 +1097,12 @@
   "layout": [
     [
       [
-        "KC_LGUI",
+        "KC_NO",
         "KC_TAB",
-        "QK_CAPS_WORD_TOGGLE",
+        "KC_ESCAPE",
         "KC_ENTER",
         "KC_NO",
-        "KC_ESCAPE"
+        "KC_NO"
       ],
       [
         "KC_D",
@@ -1117,7 +1117,7 @@
         "KC_B",
         "LCTL_T(KC_S)",
         "KC_F",
-        "KC_GRAVE",
+        "KC_NO",
         "KC_NO"
       ],
       [
@@ -1130,14 +1130,14 @@
       ],
       [
         "KC_Z",
-        "KC_LBRACKET",
-        "KC_A",
-        "KC_Q",
         "KC_NO",
+        "LGUI_T(KC_A)",
+        "KC_Q",
+        "QK_CAPS_WORD_TOGGLE",
         "KC_NO"
       ],
       [
-        "KC_RGUI",
+        "KC_NO",
         "KC_BSPACE",
         "MO(1)",
         "KC_SPACE",
@@ -1154,7 +1154,7 @@
       ],
       [
         "KC_COMMA",
-        "KC_BSLASH",
+        "KC_NO",
         "RCTL_T(KC_E)",
         "KC_U",
         "KC_J",
@@ -1171,9 +1171,9 @@
       [
         "KC_SLASH",
         "KC_QUOTE",
-        "KC_O",
+        "RGUI_T(KC_O)",
         "KC_SCOLON",
-        "KC_RBRACKET",
+        "KC_NO",
         "KC_NO"
       ]
     ],
@@ -1196,18 +1196,18 @@
       ],
       [
         "KC_PGUP",
-        "KC_NO",
+        "KC_GRAVE",
         "KC_3",
         "LSFT(KC_3)",
-        "KC_NO",
+        "LSFT(KC_GRAVE)",
         "KC_NO"
       ],
       [
         "KC_PGDOWN",
-        "KC_NO",
+        "KC_LBRACKET",
         "KC_2",
         "LSFT(KC_2)",
-        "KC_NO",
+        "LSFT(KC_LBRACKET)",
         "KC_NO"
       ],
       [
@@ -1236,18 +1236,18 @@
       ],
       [
         "KC_DOWN",
-        "KC_NO",
+        "LSFT(KC_BSLASH)",
         "KC_8",
         "LSFT(KC_8)",
-        "KC_NO",
+        "KC_BSLASH",
         "KC_NO"
       ],
       [
         "KC_UP",
-        "KC_DELETE",
+        "LSFT(KC_RBRACKET)",
         "KC_9",
         "LSFT(KC_9)",
-        "KC_INSERT",
+        "KC_RBRACKET",
         "KC_NO"
       ],
       [
@@ -2377,32 +2377,32 @@
       [
         "KC_TRNS",
         "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
+        "KC_NO"
+      ],
+      [
         "KC_BTN1",
         "KC_TRNS",
         "KC_TRNS",
-        "KC_NO"
-      ],
-      [
-        "KC_TRNS",
-        "KC_TRNS",
-        "KC_BTN3",
         "KC_TRNS",
         "KC_TRNS",
         "KC_NO"
       ],
       [
-        "KC_TRNS",
-        "KC_TRNS",
         "KC_BTN2",
         "KC_TRNS",
         "KC_TRNS",
+        "KC_TRNS",
+        "KC_TRNS",
         "KC_NO"
       ],
       [
+        "KC_BTN3",
         "KC_TRNS",
         "KC_TRNS",
         "USER13",
-        "KC_TRNS",
         "KC_TRNS",
         "KC_NO"
       ]
