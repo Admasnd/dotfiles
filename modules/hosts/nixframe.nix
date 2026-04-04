@@ -78,6 +78,7 @@ in
         moonlight-qt
         typst
         radicle-node
+        freecad
       ];
 
       home.sessionVariables = {
