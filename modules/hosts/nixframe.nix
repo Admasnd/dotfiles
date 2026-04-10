@@ -79,6 +79,7 @@ in
         typst
         radicle-node
         freecad
+        racket
       ];
 
       home.sessionVariables = {
