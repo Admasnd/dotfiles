@@ -36,6 +36,10 @@ in
         };
       };
 
+      boot.kernelModules = [
+        "kvm-intel"
+      ];
+
       networking.hostName = "nixframe"; # Define your hostname.
 
       hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;

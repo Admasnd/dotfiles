@@ -10,6 +10,10 @@
       inputs.nixos-hardware.nixosModules.framework-13-7040-amd
     ];
 
+    boot.kernelModules = [
+      "kvm-amd"
+    ];
+
     networking.hostName = "redframe"; # Define your hostname.
 
     disko.devices = {

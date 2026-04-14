@@ -207,7 +207,6 @@ in
       ];
 
       boot.kernelModules = [
-        "kvm-intel"
         "sg" # Needed for blueray drive to work with makemkv
       ];
 
