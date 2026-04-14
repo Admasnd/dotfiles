@@ -175,7 +175,7 @@
 
         systemd.services.borgbackup-job-borgbase.serviceConfig = {
           KillSignal = "SIGINT";
-          TimeoutStopSec = "10min";
+          TimeoutStopSec = "15min";
           FinalKillSignal = "SIGKILL";
         };
 
