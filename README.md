@@ -50,6 +50,12 @@ dd if=result/iso/*.iso of=/dev/sdX status=progress
 sync
 ```
 
+Build and Burn iso image to usb in one step
+
+```bash
+sudo bash -c "nix build .#nixosConfigurations.iso.config.system.build.isoImage && dd if=\$(ls result/iso/*.iso) of=/dev/sda status=progress && sync"
+```
+
 Build vm
 
 ```bash
@@ -96,36 +102,3 @@ weeks.
 ```bash
 nix-collect-garbage --delete-older-than 14d
 ```
-
-# Program Structure
-
-- [ ] gaming
-  - [ ] options.nix
-  - [ ] steam.nix
-  - [ ] sunshine.nix
-- [ ] hosts
-  - [ ] nixframe
-    - [ ] home.nix
-    - [ ] nixframe-disko.nix
-    - [ ] nixframe.nix
-  - [ ] host-defaults.nix
-  - [ ] hosts.nix
-  - [ ] iso.nix
-  - [ ] nixjoy.nix
-- [ ] keyboards
-  - [ ] keyboards.nix
-- [ ] neovim
-  - [ ] neovim.nix
-- [ ] papis
-  - [ ] papis.nix
-- [ ] power
-  - [ ] power.nix
-- [ ] auto-upgrade.nix
-- [ ] backup.nix
-- [ ] devenv.nix
-- [ ] git.nix
-- [ ] inputs.nix
-- [ ] jujutsu.nix
-- [ ] pentest.nix
-- [ ] vm.nix
-- [ ] yubikey.nix
