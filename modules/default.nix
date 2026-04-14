@@ -9,6 +9,7 @@
     ./hosts
     ./jujutsu.nix
     ./keyboards
+    ./laptop.nix
     ./neovim
     ./nostr.nix
     ./papis

@@ -7,6 +7,7 @@ let
   hosts = [
     "iso"
     "nixframe"
+    "redframe"
     "nixjoy"
   ];
 in
@@ -15,6 +16,7 @@ in
     ./base.nix
     ./iso.nix
     ./nixframe.nix
+    ./redframe.nix
     ./nixjoy.nix
   ];
 
