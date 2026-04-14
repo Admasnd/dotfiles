@@ -215,17 +215,5 @@ in
         enable = true;
         extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
       };
-
-      virtualisation.vmVariant = {
-        disko.devices.disk.main = {
-          device = "/dev/vda";
-          passwordFile = pkgs.writeText "vm-luks-password" "\n";
-        };
-        boot.initrd.luks.devices.crypted = {
-          device = "/dev/vda";
-          tryEmptyPassphrase = true;
-          passwordFile = pkgs.writeText "vm-luks-password" "\n";
-        };
-      };
     };
 }
