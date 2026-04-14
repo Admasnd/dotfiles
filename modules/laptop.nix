@@ -99,10 +99,12 @@ in
   flake.modules.nixos.laptop =
     {
       pkgs,
+      modulesPath,
       ...
     }:
     {
       imports = with topConfig.flake.modules.nixos; [
+        (modulesPath + "/installer/scan/not-detected.nix")
         backup
         base
         devenv
