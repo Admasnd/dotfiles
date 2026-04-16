@@ -1097,17 +1097,17 @@
   "layout": [
     [
       [
-        "KC_NO",
+        "KC_LCTRL",
         "KC_TAB",
-        "KC_ESCAPE",
-        "KC_ENTER",
-        "KC_NO",
-        "KC_NO"
+        "KC_LSHIFT",
+        "LT1(KC_ENTER)",
+        "KC_LGUI",
+        "QK_CAPS_WORD_TOGGLE"
       ],
       [
         "KC_D",
         "KC_G",
-        "LSFT_T(KC_T)",
+        "KC_T",
         "KC_P",
         "KC_NO",
         "KC_NO"
@@ -1115,7 +1115,7 @@
       [
         "KC_C",
         "KC_B",
-        "LCTL_T(KC_S)",
+        "KC_S",
         "KC_F",
         "KC_NO",
         "KC_NO"
@@ -1123,31 +1123,31 @@
       [
         "KC_X",
         "KC_V",
-        "LALT_T(KC_R)",
+        "KC_R",
         "KC_W",
-        "KC_NO",
+        "KC_ESCAPE",
         "KC_NO"
       ],
       [
         "KC_Z",
         "KC_NO",
-        "LGUI_T(KC_A)",
+        "KC_A",
         "KC_Q",
-        "QK_CAPS_WORD_TOGGLE",
+        "KC_DELETE",
         "KC_NO"
       ],
       [
-        "KC_NO",
+        "KC_LALT",
         "KC_BSPACE",
         "MO(1)",
         "KC_SPACE",
-        "KC_NO",
+        "KC_RGUI",
         "MO(2)"
       ],
       [
         "KC_H",
         "KC_NO",
-        "RSFT_T(KC_N)",
+        "KC_N",
         "KC_L",
         "KC_M",
         "KC_NO"
@@ -1155,7 +1155,7 @@
       [
         "KC_COMMA",
         "KC_NO",
-        "RCTL_T(KC_E)",
+        "KC_E",
         "KC_U",
         "KC_J",
         "KC_NO"
@@ -1163,7 +1163,7 @@
       [
         "KC_DOT",
         "LT14(KC_NO)",
-        "RALT_T(KC_I)",
+        "KC_I",
         "KC_Y",
         "KC_K",
         "KC_NO"
@@ -1171,7 +1171,7 @@
       [
         "KC_SLASH",
         "KC_QUOTE",
-        "RGUI_T(KC_O)",
+        "KC_O",
         "KC_SCOLON",
         "KC_NO",
         "KC_NO"
