@@ -30,8 +30,8 @@ in
             "*/target"
           ];
           remotePrivateKeyPath = "/home/antwane/.ssh/id_borgbase";
-          localRepo = "/run/media/antwane/FRAME-USB/borg";
-          localRepoMount = "run-media-antwane-FRAME\\x2dUSB.mount";
+          localRepo = "/run/media/antwane/FRAMESTORE/backup";
+          localRepoMount = "run-media-antwane-FRAMESTORE.mount";
           startAt = "hourly";
         };
       };
