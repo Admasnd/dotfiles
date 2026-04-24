@@ -85,6 +85,18 @@ ssh-keyscan -H <server>
 You can then set the hostkey declaratively using
 `services.openssh.knownHosts.<name>.publicKey`.
 
+Verify repository integrity
+
+```bash
+borg check --verify-data <repo>
+```
+
+Verify archive content matches local data
+
+```bash
+systemd-inhibit --who "borg" --why "backup-test" borg export-tar <repo>::<archive> - | tar -C / -d -f -
+```
+
 # FIDO2 Unlock
 
 `systemd-cryptenroll` must be used to manually enroll FIDO2 key into LUKS2
