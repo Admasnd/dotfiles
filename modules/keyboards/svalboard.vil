@@ -1100,8 +1100,8 @@
         "KC_LCTRL",
         "KC_TAB",
         "KC_LSHIFT",
-        "LT1(KC_ENTER)",
-        "KC_LGUI",
+        "KC_ENTER",
+        "KC_NO",
         "QK_CAPS_WORD_TOGGLE"
       ],
       [
@@ -1141,7 +1141,7 @@
         "KC_BSPACE",
         "MO(1)",
         "KC_SPACE",
-        "KC_RGUI",
+        "KC_LGUI",
         "MO(2)"
       ],
       [
