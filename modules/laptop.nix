@@ -133,13 +133,6 @@ in
         ];
       };
 
-      swapDevices = [
-        {
-          device = "/.swapvol/swapfile";
-          size = 32 * 1024;
-        }
-      ];
-
       # Define a user account. Don't forget to set a password with ‘passwd’.
       users.groups.uinput = { };
       users.groups.plugdev = { };

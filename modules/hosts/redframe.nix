@@ -16,6 +16,13 @@
 
     networking.hostName = "redframe"; # Define your hostname.
 
+    swapDevices = [
+      {
+        device = "/.swapvol/swapfile";
+        size = 64 * 1024;
+      }
+    ];
+
     disko.devices = {
       disk = {
         main = {

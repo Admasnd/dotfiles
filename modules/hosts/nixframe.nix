@@ -44,6 +44,13 @@ in
 
       hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
 
+      swapDevices = [
+        {
+          device = "/.swapvol/swapfile";
+          size = 32 * 1024;
+        }
+      ];
+
       disko.devices = {
         disk = {
           main = {
