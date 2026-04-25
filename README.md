@@ -62,6 +62,28 @@ Build vm
 nixos-rebuild --flake .#<host> build-vm
 ```
 
+# Remote install
+
+In order to format disk and install NixOS with host configuration, do the following:
+
+1. burn nixos install image to usb
+2. boot installer on target machine
+3. use `mkpasswd` on target machine to set password for nixos account
+4. connect target machine to internet
+5. use `ip addr` to discover target machine ip address
+6. run nixos-anywhere from another machine to format and install configuration on target machine
+
+These instructions assume that a disko configuration was defined in the host configuration to
+facilitate disk formatting. The `--extra-files` options can be used to copy necessary sops
+secrets to target machine prior to installation. The filesystem structure of the files you
+want to copy over must be replicated in the provided directory. For example, if you want foo.txt
+to be copied to /etc/foo.txt on the target machine, you must store foo.txt in ~/Downloads/tmp/etc/foo.txt
+and then set `--extra-files ~/Downloads/tmp` option when call nixos-anywhere.
+
+```bash
+nix run github:nix-community/nixos-anywhere -- -f <flake>#<host> --target-host nixos@<destination-ip-address> --extra-files <directory>
+```
+
 # Tailscale
 
 We want to be able to access nixjoy over the internet safely.
