@@ -63,6 +63,7 @@ in
         evince
         fzf
         age
+        orca-slicer # 3d printing
         vorta
         vlc
         jq
