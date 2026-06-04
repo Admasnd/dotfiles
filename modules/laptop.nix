@@ -71,6 +71,7 @@ in
         yazi # file manager tui
         fd # find replacement
         ghostty
+        puddletag
         # programming
         tmux
         nodejs
