@@ -72,6 +72,7 @@ in
         fd # find replacement
         ghostty
         puddletag
+        whipper
         # programming
         tmux
         nodejs
