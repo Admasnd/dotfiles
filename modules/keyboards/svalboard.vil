@@ -1097,7 +1097,7 @@
   "layout": [
     [
       [
-        "KC_NO",
+        "KC_LCTRL",
         "KC_TAB",
         "KC_LSHIFT",
         "KC_ENTER",
@@ -1137,7 +1137,7 @@
         "KC_NO"
       ],
       [
-        "KC_NO",
+        "KC_LALT",
         "KC_BSPACE",
         "MO(1)",
         "KC_SPACE",
