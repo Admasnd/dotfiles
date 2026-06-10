@@ -1,6 +1,11 @@
 {
   flake.modules.nixos.backup =
-    { config, lib, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       inherit (lib)
         mkEnableOption
@@ -14,6 +19,104 @@
         str
         listOf
         ;
+      breakStaleLock = ''
+        break_stale_lock() {
+          local lockpath="$1"
+          # Skip if nothing exists at all
+          [ -e "$lockpath" ] || [ -L "$lockpath" ] || return 0
+
+          # Handle regular file or symlink (shouldn't exist, but clean it up)
+          if [ -L "$lockpath" ] || [ -f "$lockpath" ]; then
+            echo "Unexpected: $lockpath is a file/symlink, not a directory. Removing."
+            rm -f "$lockpath"
+            return 0
+          fi
+
+          # Now we know it's a directory (or should be)
+          if [ ! -d "$lockpath" ]; then
+            echo "Cannot determine type of $lockpath, skipping"
+            return 0
+          fi
+
+          # Check for id files inside the lock directory
+          local found_idfile=0
+          local active_lock=0
+          for idfile in "$lockpath"/*; do
+            # Handle empty glob — no id files means empty directory
+            [ -e "$idfile" ] || continue
+              
+            local basename=$(basename "$idfile")
+            # Skip lock.roster or other non-id files
+            echo "$basename" | grep -qE '^[^@]+@.+\.pid[0-9]+\.thread[0-9]+' || continue
+
+            found_idfile=1
+            local lock_host=$(echo "$basename" | grep -oP '^[^@]+')
+            local lock_pid=$(echo "$basename" | grep -oP 'pid\K\d+')
+            local current_host=$(${pkgs.inetutils}/bin/hostname)
+
+            if [ "$lock_host" != "$current_host" ]; then
+              echo "Lock from different host '$lock_host', skipping"
+              active_lock=1
+              continue
+            fi
+
+            if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+              echo "Lock held by active PID $lock_pid, aborting" >&2
+              active_lock=1
+            fi
+          done
+
+          # If any active lock was found, abort entirely
+          if [ "$active_lock" -eq 1 ]; then
+            echo "Active lock detected at $lockpath. Aborting backup."
+          exit 1
+          fi
+
+          # If no id files found — empty directory.
+          # This is the DANGEROUS case: it could be a race condition where
+          # another Borg process just created the directory but hasn't written
+          # the id file yet. Wait and re-check before deciding it's stale.
+          if [ "$found_idfile" -eq 0 ]; then
+            echo "Empty lock directory at $lockpath. Waiting 5s to rule out race condition..."
+            sleep 5
+
+            # Re-check after waiting
+            for idfile in "$lockpath"/*; do
+              [ -e "$idfile" ] || continue
+              local basename=$(basename "$idfile")
+              echo "$basename" | grep -qE '^[^@]+@.+\.pid[0-9]+\.thread[0-9]+' || continue
+              local lock_pid=$(echo "$basename" | grep -oP 'pid\K\d+')
+              if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+                echo "After wait: lock is now held by active PID $lock_pid. Aborting."
+                exit 1
+              fi
+            done
+
+             # Still empty after waiting — genuinely stale
+            echo "Empty lock directory at $lockpath is stale (5s elapsed, no id file appeared). Removing."
+            rm -rf "$lockpath"
+            return 0
+          fi
+
+          # All id files had dead PIDs — safe to remove
+          echo "All lock holders are dead. Removing stale lock at $lockpath."
+          rm -rf "$lockpath"
+        }
+
+        # Break repository lock
+        if echo "$BORG_REPO" | grep -qE '^(ssh://|sftp://|[^/]+:)'; then
+          # Remote repo: delegate to borg break-lock over SSH
+          # ${pkgs.borgbackup}/bin/borg break-lock "$BORG_REPO" 2>/dev/null || true
+          echo "TODO: safely call borg break-lock"
+        else
+          # Local repo: directly remove stale lock
+          break_stale_lock "$BORG_REPO/lock.exclusive"
+        fi
+
+        # Break all cache locks
+        for cachedir in /root/.cache/borg/*/lock.exclusive; do
+          break_stale_lock "$cachedir"
+        done'';
       cfg = config.admasnd.dotfiles.backup;
     in
     {
@@ -153,6 +256,7 @@
             "--stats"
             "--verbose"
           ];
+          preHook = breakStaleLock;
         };
         services.borgbackup.jobs.localexternal = {
           paths = cfg.paths;
@@ -171,11 +275,12 @@
           ];
           removableDevice = true;
           persistentTimer = true;
+          preHook = breakStaleLock;
         };
 
         systemd.services.borgbackup-job-borgbase.serviceConfig = {
           KillSignal = "SIGINT";
-          TimeoutStopSec = "15min";
+          TimeoutStopSec = "30min";
           FinalKillSignal = "SIGKILL";
         };
 
@@ -187,7 +292,7 @@
           };
           serviceConfig = {
             KillSignal = "SIGINT";
-            TimeoutStopSec = "10min";
+            TimeoutStopSec = "30min";
             FinalKillSignal = "SIGKILL";
           };
           wantedBy = [ cfg.localRepoMount ];
