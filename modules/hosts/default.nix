@@ -24,9 +24,11 @@ in
   flake.nixosConfigurations = lib.genAttrs hosts (
     host:
     lib.nixosSystem {
-      system = "x86_64-linux";
       modules = [
         config.flake.modules.nixos.${host}
+        {
+          nixpkgs.hostPlatform = "x86_64-linux";
+        }
       ];
     }
   );
