@@ -33,6 +33,8 @@
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
+        withRuby = false;
+        withPython3 = false;
         extraPackages = with pkgs; [
           cargo
           emmet-language-server # for html and css
