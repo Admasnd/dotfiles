@@ -219,5 +219,11 @@ in
         "electron-39.8.10"
       ];
 
+      # This fixes FreeCAD crash upon opening 3D model files
+      environment.sessionVariables = {
+        # Make GTK3 file-chooser settings discoverable
+        # per https://github.com/NixOS/nixpkgs/issues/467783#issuecomment-3648708206
+        GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
+      };
     };
 }
