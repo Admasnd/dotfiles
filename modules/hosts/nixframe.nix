@@ -18,11 +18,6 @@ in
         inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
       ];
 
-      # This is added for bitwarden
-      nixpkgs.config.permittedInsecurePackages = [
-        "electron-39.8.10"
-      ];
-
       admasnd.dotfiles = {
         backup = {
           paths = [

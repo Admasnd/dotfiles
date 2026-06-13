@@ -213,5 +213,11 @@ in
         enable = true;
         extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
       };
+
+      # This is added for bitwarden
+      nixpkgs.config.permittedInsecurePackages = [
+        "electron-39.8.10"
+      ];
+
     };
 }
