@@ -28,6 +28,32 @@ in
             "*/Downloads"
             "*/result"
             "*/target"
+
+            # ── Cache / regenerable dirs ──
+            "re:^.*[/](Cache|Code Cache|GPUCache|ShaderCache|GrShaderCache|Application Cache|Media Cache)$"
+            "re:^.*[/](Service Worker)[/](CacheStorage|ScriptCache)$"
+            "re:^.*[/](Thumbnails|JumpListIcons|JumpListIconsRecent|JumpListIconsFrequent|JumpListIconsCustom)$"
+            "re:^.*[/](Session Storage|File System|blob_storage|shared_proto_db|Platform Notifications)$"
+            "re:^.*[/](Crashpad|BudgetDatabase|VideoDecodeStats|Snapshots)$"
+            "re:^.*[/](component_crx_cache|CertificateRevocation|AutofillStrikeDatabase)$"
+            "re:^.*[/](commerce_subscription_db|coupon_db|MEIPreload|ZxcvbnData|SSLErrorAssistant)$"
+
+            # ── Cache dirs at User Data level ──
+            "re:^.*[/](ShaderCache|GrShaderCache|SimCast)$"
+
+            # ── Regenerable single files ──
+            "re:^.*[/](Current Session|Last Session|Current Tabs|Last Tabs)$"
+            "re:^.*[/]Bookmarks\\.bak$"
+            "re:^.*[/]TransportSecurity$"
+            "re:^.*[/]Safe Browsing.*$"
+            "re:^.*[/]Network Action Predictor$"
+            "re:^.*[/]optimization_guide_.*$"
+
+            # ── SQLite WAL / journal files ──
+            "re:^.*-journal$"
+            "re:^.*-wal$"
+            "re:^.*-shm$"
+
           ];
           remotePrivateKeyPath = "/home/antwane/.ssh/id_borgbase";
           localRepo = "/run/media/antwane/FRAMESTORE/backup";
