@@ -63,7 +63,14 @@ in
         evince
         fzf
         age
-        orca-slicer # 3d printing
+        # 3d printing
+        (orca-slicer.override {
+          glew = (
+            glew.override {
+              enableEGL = false;
+            }
+          );
+        })
         vorta
         vlc
         jq
