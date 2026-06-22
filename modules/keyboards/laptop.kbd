@@ -1,55 +1,124 @@
-(defsrc 
-    esc   mute voldwn volu prev pp      next brdn bru            prnt   media 
-    `     1    2      3    4    5       6    7    8   9     0    -      =     bks
-    tab   q    w      e    r    t       y    u    i   o     p    [      ]     \
-    caps  a    s      d    f    g       h    j    k   l     ;    '      ent
-    lshft z    x      c    v    b       n    m    ,   .     /    rshft
-    lctl       lmet   lalt spc  ralt    rctl lft  up  down  rght)
+;; configuration derived from https://gist.github.com/ldebritto/44574eac93148f387aaa560ccb131903
 
-;; timeout for caps-word is 3 seconds
-(defvar cap-timeout 3000
-        hold-timeout 150 
-        tap-repress-timeout 150
-        left-kb (` 1 3 4 5
-                 q w f p b
-                         g
-                 z x c d v)
-        right-kb (6 7 8 9 0 - = bks
-                  j l u y ; [ ] \
-                  m         ' ent
-                  k h , . / ))
+(defcfg
+    allow-hardware-repeat false
+    ;; when yes, make keys not defined in defsrc to no-op
+    block-unmapped-keys no
+    ;; timeout starts after press rather than after previous tap-hold expires
+    concurrent-tap-hold yes
+    ;; transparent keys fall through to first defined layer, rather than defsrc
+    delegate-to-first-layer yes
+    ;; only intercept laptop keyboard
+    linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
+    log-layer-changes no
+    ;; process keys that are not mapped in defsrc
+    process-unmapped-keys yes
+)
+
+(defvar cap-timeout 3000                            ;; timeout for caps-word is 3 seconds
+        home-row-left-keys (a r s t)
+        home-row-right-keys (n e i o)
+        left-side-keys (q w f p b g z x c d v)
+        quick-tap-ms 200                            ;; repeat key when repress and hold key after tap within time window
+        require-prior-idle 250                      ;; idle time since last tapped key before homerow mods can be used
+        right-side-keys (j l u y ; m ' k h , . / )
+        tapping-term 300                            ;; resolve tap-hold to hold if exceeds this timeout
+)
+
+;; implements tap-flow
+(deftemplate nomod (tap-key)
+  (multi $tap-key @tap)
+)
+
+;; home row mods templates mimicking urob's timerless home row mods implementation
+;; tap-hold-release-tap-keys-release implements:
+;; - permissive-hold where if tap-hold key is processed as held if another key is pressed and released before
+;;   tap-hold key is released
+;; - chordal-hold where tap-hold key is processed as tap if the other key pressed is on same side of keyboard
+;; nomod template implements tap-flow where tap-hold key is processed as tap while time between prior tap within
+;; require-prior-idle.
+(deftemplate lhrm (tappingterm tap-key hold-key)  ;; left hand mods
+  (tap-hold-release-tap-keys-release $quick-tap-ms $tappingterm (t! nomod $tap-key) $hold-key $left-side-keys $home-row-left-keys)
+)
+
+(deftemplate rhrm (tappingterm tap-key hold-key)  ;; right hand mods
+  (tap-hold-release-tap-keys-release $quick-tap-ms $tappingterm (t! nomod $tap-key) $hold-key $right-side-keys $home-row-right-keys)
+)
+
+(defalias
+      ;; quasi-zmk's 'require-prior-idle' behavior
+      tap (multi                                             
+        (layer-switch nomods)                                ;; temporarily switches to a layer with no home row mods enabled
+        (on-idle $require-prior-idle tap-virtualkey to-base) ;; when $require-prior-idle expires, uses the fake key to return to base layer (see )
+      )
+
+      ;; home row mods using GASC order
+      a (t! lhrm   $tapping-term        a lmet   )
+      r (t! lhrm   $tapping-term        r lalt   )
+      s (t! lhrm   $tapping-term        s lsft   )
+      t (t! lhrm   $tapping-term        f lctrl  )
+  
+      n (t! rhrm   $tapping-term        n rctl   )
+      e (t! rhrm   $tapping-term        e rsft   )
+      i (t! rhrm   $tapping-term        i lalt   )
+      o (t! rhrm   $tapping-term        o lmet   )
+
+      ;; all the other alphas and def regular typing characters for require-prior-idle-like behavior as suggested by sgraar here (https://www.reddit.com/r/ErgoMechKeyboards/comments/1qosvc0/comment/o7cmdzd/)
+      q (t! nomod q)
+      w (t! nomod w)
+      f (t! nomod f)
+      p (t! nomod p)
+      b (t! nomod b)
+
+      g (t! nomod g)
+
+      z (t! nomod z)
+      x (t! nomod x)
+      c (t! nomod c)
+      d (t! nomod d)
+      v (t! nomod v)
+
+      j (t! nomod j)
+      l (t! nomod l)
+      u (t! nomod u)
+      y (t! nomod y)
+      ; (t! nomod ;)
+
+      m (t! nomod m)
+      ' (t! nomod ')
+
+      k (t! nomod k)
+      h (t! nomod h)
+      , (t! nomod ,)
+      . (t! nomod .)
+      / (t! nomod /)
+
+      spc (t! nomod spc)
+)
 
 (defalias capw (caps-word $cap-timeout))        
 
-;; mod,lmod, and rmod represent chordal hold and permissive hold
-(deftemplate mod (tap-action hold-action tap-keys)
-    (tap-hold-release-keys $tap-repress-timeout $hold-timeout $tap-action $hold-action $tap-keys))
-(deftemplate lmod (tap-action hold-action) 
-    (t! mod $tap-action $hold-action $left-kb))
+(defvirtualkeys  
+  to-base (layer-switch def) ;; used in @tap alias to return to base layer on tap after hold-tap-release keys in an attempt to emulate ZMK require-prior-idle behavior
+)
 
-(deftemplate rmod (tap-action hold-action) 
-    (t! mod $tap-action $hold-action $right-kb))
+(defsrc 
+          q    w      e    r    t       y    u    i   o     p
+    caps  a    s      d    f    g       h    j    k   l     ;    '
+          z    x      c    v    b       n    m    ,   .     /
+                                                  ralt rctl
+)
 
-;; Colemak DH Otholinear layout 
-;; Caps lock switched to cap-word
-(deflayermap (base)
-    a    (t! lmod a lmeta) 
-    e    f                   y j
-    r    p                   u l
-    t    b                   i u
-    s    (t! lmod r lalt)    o y
-    d    (t! lmod s lctl)    p ;
-    f    (t! lmod t lsft)    h m
-    v    d                   j (t! rmod n rsft) 
-    b    v                   k (t! rmod e rctl)
-    caps @capw               l (t! rmod i ralt)
-    lsft esc                 ; (t! rmod o rmeta)
-    rsft nop0                n k
-    lmeta mlft                m h
-    lalt mrgt                lctl mmid)
+(deflayer def 
+          @q    @w      @f    @p    @b       @j    @l    @u   @y     @;
+    @capw @a    @r      @s    @t    @g       @m    @n    @e   @i     @o    @'
+          @z    @x      @c    @d    @v       @k    @h    @,   @.     @/
+                                                  mlft mrgt 
+)
 
-(defcfg
-    log-layer-changes yes
-    allow-hardware-repeat false
-    process-unmapped-keys yes
-    linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd)
+(deflayer nomods ;; temporarily switch to a layer with no hold-taps to emulate ZMK require-prior-idle setting on home row mods definition
+          q    w      f    p    b       j    l    u   y     ;
+        _ a    r      s    t    g       m    n    e   i     o    '
+          z    x      c    d    v       k    h    ,   .     /
+                                                  _ _ 
+)
