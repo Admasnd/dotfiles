@@ -56,7 +56,7 @@
       a (t! lhrm   $tapping-term        a lmet   )
       r (t! lhrm   $tapping-term        r lalt   )
       s (t! lhrm   $tapping-term        s lsft   )
-      t (t! lhrm   $tapping-term        f lctrl  )
+      t (t! lhrm   $tapping-term        t lctrl  )
   
       n (t! rhrm   $tapping-term        n rctl   )
       e (t! rhrm   $tapping-term        e rsft   )
@@ -106,19 +106,19 @@
           q    w      e    r    t       y    u    i   o     p
     caps  a    s      d    f    g       h    j    k   l     ;    '
           z    x      c    v    b       n    m    ,   .     /
-                                                  ralt rctl
+                                             spc ralt rctl
 )
 
 (deflayer def 
           @q    @w      @f    @p    @b       @j    @l    @u   @y     @;
     @capw @a    @r      @s    @t    @g       @m    @n    @e   @i     @o    @'
           @z    @x      @c    @d    @v       @k    @h    @,   @.     @/
-                                                  mlft mrgt 
+                                             @spc mlft mrgt 
 )
 
 (deflayer nomods ;; temporarily switch to a layer with no hold-taps to emulate ZMK require-prior-idle setting on home row mods definition
           q    w      f    p    b       j    l    u   y     ;
         _ a    r      s    t    g       m    n    e   i     o    '
           z    x      c    d    v       k    h    ,   .     /
-                                                  _ _ 
+                                                 _ _ _ 
 )
