@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   ...
 }:
 let
@@ -63,14 +64,6 @@ in
         evince
         fzf
         age
-        # 3d printing
-        (orca-slicer.override {
-          glew = (
-            glew.override {
-              enableEGL = false;
-            }
-          );
-        })
         vorta
         vlc
         jq
@@ -116,6 +109,7 @@ in
     {
       imports = with topConfig.flake.modules.nixos; [
         (modulesPath + "/installer/scan/not-detected.nix")
+        inputs.nix-flatpak.nixosModules.nix-flatpak
         backup
         base
         devenv
@@ -128,6 +122,13 @@ in
         tailscale
         yubikey
       ];
+
+      services.flatpak.enable = true;
+      services.flatpak.packages = [ "com.orcaslicer.OrcaSlicer" ];
+      services.flatpak.update.auto = {
+        enable = true;
+        onCalendar = "weekly"; # Default value
+      };
 
       admasnd.dotfiles = {
         gaming.steam = {

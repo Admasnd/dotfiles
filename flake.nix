@@ -16,6 +16,7 @@
       flake = false;
       url = "github:vuciv/golf";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/latest";
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
