@@ -94,6 +94,7 @@
       / (t! nomod /)
 
       spc (t! nomod spc)
+      sft (one-shot-release-pcancel $cap-timeout lsft)
 )
 
 (defalias capw (caps-word $cap-timeout))        
@@ -105,20 +106,20 @@
 (defsrc 
           q    w      e    r    t       y    u    i   o     p
     caps  a    s      d    f    g       h    j    k   l     ;    '
-          z    x      c    v    b       n    m    ,   .     /
-                                             spc ralt rctl
+    lsft  z    x      c    v    b       n    m    ,   .     /
+          lalt                               spc ralt rctl
 )
 
 (deflayer def 
           @q    @w      @f    @p    @b       @j    @l    @u   @y     @;
     @capw @a    @r      @s    @t    @g       @m    @n    @e   @i     @o    @'
-          @z    @x      @c    @d    @v       @k    @h    @,   @.     @/
-                                             @spc mlft mrgt 
+    esc   @z    @x      @c    @d    @v       @k    @h    @,   @.     @/
+          @sft                               @spc mlft mrgt 
 )
 
 (deflayer nomods ;; temporarily switch to a layer with no hold-taps to emulate ZMK require-prior-idle setting on home row mods definition
           q    w      f    p    b       j    l    u   y     ;
         _ a    r      s    t    g       m    n    e   i     o    '
-          z    x      c    d    v       k    h    ,   .     /
-                                                 _ _ _ 
+        _ z    x      c    d    v       k    h    ,   .     /
+          _                                      _ _ _ 
 )
