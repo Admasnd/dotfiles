@@ -36,7 +36,7 @@
         };
 
         config = mkIf (config.admasnd.dotfiles.sops.enable && cfg.enable) {
-          sops.secrets.${cfg.pamSecretPath} = { };
+          sops.secrets.${cfg.pamSecretPath}.neededForUsers = true;
 
           security.pam.u2f.enable = true;
           security.pam.u2f.settings = {
