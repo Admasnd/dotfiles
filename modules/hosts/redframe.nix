@@ -44,6 +44,7 @@
               luks = {
                 size = "100%";
                 content = {
+                  enrollFido2 = true;
                   type = "luks";
                   name = "crypted";
                   settings = {

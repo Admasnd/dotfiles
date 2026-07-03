@@ -100,6 +100,7 @@ in
                   content = {
                     type = "luks";
                     name = "crypted";
+                    enrollFido2 = true;
                     settings = {
                       allowDiscards = true;
                       bypassWorkqueues = true;
