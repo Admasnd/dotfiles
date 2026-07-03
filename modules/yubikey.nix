@@ -40,6 +40,10 @@
 
           security.pam.u2f.enable = true;
           security.pam.u2f.settings = {
+            # set the following two values so that pam authfile is portable between devices
+            origin = "pam://yubikey";
+            appid = "pam://yubikey";
+            cue = true;
             authfile = config.sops.secrets.${cfg.pamSecretPath}.path;
             pinverification = 1;
             userpresence = 1;
