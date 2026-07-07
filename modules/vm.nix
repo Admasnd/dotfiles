@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.vm =
+  flake.nixosModules.vm =
     { config, lib, ... }:
     let
       cfg = config.admasnd.dotfiles.vm;

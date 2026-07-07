@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.udev =
+  flake.nixosModules.base =
     { pkgs, ... }:
     {
 

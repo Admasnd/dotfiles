@@ -1,9 +1,12 @@
 { inputs, ... }:
 {
-  flake.modules.homeManager.papis = {
-    home.packages = [
-      inputs.nixpkgs.legacyPackages.x86_64-linux.papis
+  flake.nixosModules.laptop = { pkgs, ... }: {
+    environment.systemPackages = [
+      (inputs.wrapper-modules.lib.wrapPackage {
+        inherit pkgs;
+        package = pkgs.papis;
+        flags."-c" = ./config;
+      })
     ];
-    xdg.configFile."papis/config".source = ./config;
   };
 }

@@ -1,41 +1,44 @@
 {
-  flake.modules = {
-    homeManager.yubikey =
-      { pkgs, ... }:
-      {
-        home.packages = with pkgs; [
-          yubioath-flutter
-          yubikey-manager
-        ];
-      };
-    nixos.yubikey =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
-      }:
-      let
-        inherit (lib) mkEnableOption mkIf mkOption;
-        inherit (lib.types) str;
-        cfg = config.admasnd.dotfiles.yubikey;
-      in
-      {
-        options.admasnd.dotfiles.yubikey = {
-          enable = mkEnableOption "yubikey";
-          pamSecretPath = mkOption {
-            type = str;
-            description = ''
-              path in YAML secrets file where PAM authfile is stored.
-              This authfile associates a yubikey public key to a user account.
+  flake.nixosModules.base =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    let
+      inherit (lib)
+        mkEnableOption
+        mkIf
+        mkMerge
+        mkOption
+        ;
+      inherit (lib.types) str;
+      cfg = config.admasnd.dotfiles.yubikey;
+    in
+    {
+      options.admasnd.dotfiles.yubikey = {
+        enable = mkEnableOption "yubikey";
+        pamSecretPath = mkOption {
+          type = str;
+          description = ''
+            path in YAML secrets file where PAM authfile is stored.
+            This authfile associates a yubikey public key to a user account.
 
-              Sets `security.pam.u2f.settings.authfile`.
-            '';
-            example = "path/to/authfile";
-          };
+            Sets `security.pam.u2f.settings.authfile`.
+          '';
+          example = "path/to/authfile";
         };
+      };
 
-        config = mkIf (config.admasnd.dotfiles.sops.enable && cfg.enable) {
+      config = mkMerge [
+        {
+          environment.systemPackages = with pkgs; [
+            yubioath-flutter
+            yubikey-manager
+          ];
+        }
+        (mkIf (config.admasnd.dotfiles.sops.enable && cfg.enable) {
           sops.secrets.${cfg.pamSecretPath}.neededForUsers = true;
 
           security.pam.u2f.enable = true;
@@ -61,7 +64,7 @@
             sudo.u2fAuth = true;
             gdm-password.u2fAuth = true;
           };
-        };
-      };
-  };
+        })
+      ];
+    };
 }

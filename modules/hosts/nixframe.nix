@@ -7,14 +7,16 @@ let
   topConfig = config;
 in
 {
-  flake.modules.nixos.nixframe =
+  flake.nixosModules.nixframe =
     {
       config,
       ...
     }:
     {
       imports = [
-        topConfig.flake.modules.nixos.laptop
+        topConfig.flake.nixosModules.base
+        topConfig.flake.nixosModules.gaming
+        topConfig.flake.nixosModules.laptop
         inputs.nixos-hardware.nixosModules.framework-11th-gen-intel
       ];
 
@@ -69,7 +71,6 @@ in
       networking.hostName = "nixframe"; # Define your hostname.
 
       hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
-
       swapDevices = [
         {
           device = "/.swapvol/swapfile";

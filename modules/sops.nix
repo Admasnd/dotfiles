@@ -16,7 +16,7 @@ let
   };
 in
 {
-  flake.modules.nixos.sops =
+  flake.nixosModules.base =
     { config, ... }:
     let
       cfg = config.admasnd.dotfiles.sops;

@@ -1,6 +1,21 @@
-{ inputs, ... }:
+{ inputs, moduleWithSystem, ... }:
 {
-  flake.modules.homeManager.neovim =
+  flake.nixosModules.laptop = moduleWithSystem (
+    { config, ... }:
+    { ... }:
+    {
+      programs.neovim = {
+        enable = true;
+        package = config.packages.myNeovim;
+        viAlias = true;
+        vimAlias = true;
+        withRuby = false;
+        withPython3 = false;
+      };
+    }
+  );
+
+  perSystem =
     { pkgs, ... }:
     let
       golf-vim = pkgs.vimUtils.buildVimPlugin {
@@ -26,16 +41,9 @@
       };
     in
     {
-      home.packages = [ vimdirdiff ];
-      programs.neovim = {
-        enable = true;
-        defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
-        vimdiffAlias = true;
-        withRuby = false;
-        withPython3 = false;
-        extraPackages = with pkgs; [
+      packages.myNeovim = inputs.wrapper-modules.wrappers.neovim.wrap {
+        inherit pkgs;
+        runtimePkgs = with pkgs; [
           cargo
           emmet-language-server # for html and css
           fd
@@ -55,8 +63,10 @@
           typstyle # Typst formatter
           yaml-language-server
           yq-go # for papis.nvim
+          vimdirdiff
         ];
-        plugins = with pkgs.vimPlugins; [
+
+        specs.general = with pkgs.vimPlugins; [
           conform-nvim
           vim-dirdiff
           golf-vim
@@ -94,8 +104,8 @@
           typst-preview-nvim
           which-key-nvim
         ];
-      };
 
-      xdg.configFile."nvim".source = ./nvim;
+        settings.config_directory = ./nvim;
+      };
     };
 }

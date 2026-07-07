@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.power =
+  flake.nixosModules.laptop =
     { pkgs, ... }:
     {
       boot.resumeDevice = "/dev/mapper/crypted";

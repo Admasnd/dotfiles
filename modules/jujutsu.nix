@@ -1,5 +1,20 @@
-{
-  flake.modules.homeManager.jujutsu =
+{ inputs, moduleWithSystem, ... }: {
+  flake.nixosModules.laptop = moduleWithSystem (
+    { config, ... }:
+    { pkgs, ... }:
+    {
+      # tool for verifying commits have conventional commit format,
+      # bumping semantic versioning, and generating changelog
+      environment.systemPackages = with pkgs; [
+        cocogitto
+        jjui
+        config.packages.myJujutsu
+      ];
+
+    }
+  );
+
+  perSystem =
     { pkgs, ... }:
     let
       jjPush = pkgs.writeShellApplication {
@@ -12,11 +27,8 @@
       };
     in
     {
-      # tool for verifying commits have conventional commit format,
-      # bumping semantic versioning, and generating changelog
-      home.packages = with pkgs; [ cocogitto ];
-      programs.jujutsu = {
-        enable = true;
+      packages.myJujutsu = inputs.wrapper-modules.wrappers.jujutsu.wrap {
+        inherit pkgs;
         settings = {
           aliases = {
             bm = [
@@ -72,10 +84,5 @@
           '';
         };
       };
-      programs.jjui.enable = true;
-      # Added jujutsu dynamic completion
-      programs.bash.bashrcExtra = ''
-        . <(COMPLETE=bash jj)
-      '';
     };
 }

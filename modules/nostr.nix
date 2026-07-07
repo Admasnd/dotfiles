@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.nostr = {
+  flake.nixosModules.nostr = { pkgs, ... }:{
     services.nostr-rs-relay = {
       enable = true;
       settings = {
@@ -8,6 +8,6 @@
         info.name = "nostr-backup-relay";
       };
     };
-    programs.appimage.enable = true;
+    environment.systemPackages = with pkgs; [gossip];
   };
 }

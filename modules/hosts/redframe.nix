@@ -4,9 +4,11 @@
   ...
 }:
 {
-  flake.modules.nixos.redframe = {
+  flake.nixosModules.redframe = {
     imports = [
-      config.flake.modules.nixos.laptop
+      config.flake.nixosModules.base
+      config.flake.nixosModules.gaming
+      config.flake.nixosModules.laptop
       inputs.nixos-hardware.nixosModules.framework-13-7040-amd
     ];
 

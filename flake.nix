@@ -1,7 +1,7 @@
 {
   description = "Flake for dotfiles including NixOS and home-manager configuration";
 
-  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } { imports = [ ./modules ]; };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
     disko = {
@@ -16,6 +16,7 @@
       flake = false;
       url = "github:vuciv/golf";
     };
+    import-tree.url = "github:vic/import-tree";
     nix-flatpak.url = "github:gmodena/nix-flatpak/latest";
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
@@ -31,6 +32,10 @@
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+    wrapper-modules = {
+        url = "github:BirdeeHub/nix-wrapper-modules";
+        inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 }

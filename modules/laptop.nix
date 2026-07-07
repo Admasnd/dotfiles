@@ -3,17 +3,22 @@
   inputs,
   ...
 }:
-let
-  topConfig = config;
-in
 {
-  flake.modules.homeManager.laptop =
+  flake.nixosModules.laptop =
     {
       lib,
+      modulesPath,
       pkgs,
       ...
     }:
     {
+      imports = [
+        (modulesPath + "/installer/scan/not-detected.nix")
+        inputs.nix-flatpak.nixosModules.nix-flatpak
+      ];
+
+      programs.git.enable = true;
+
       # enables (un)loading environment variables by changing directories
       programs.direnv = {
         enable = true;
@@ -24,7 +29,7 @@ in
       # let home-manager manage bash
       programs.bash = {
         enable = true;
-        enableCompletion = true;
+        completion.enable = true;
         shellAliases = {
           ns = "sudo nixos-rebuild --flake . switch --max-jobs auto";
           nb = "nixos-rebuild --flake . build --max-jobs auto";
@@ -33,16 +38,21 @@ in
           ll = "ls -la";
           fu = "nix flake update";
         };
-        bashrcExtra = ''
-          . <( tailscale completion bash )
-          . <(zoxide init bash) 
-        '';
       };
 
-      home.username = "antwane";
-      home.homeDirectory = "/home/antwane";
-
-      home.packages = with pkgs; [
+      environment.systemPackages = with pkgs; [
+        # tools for using lazy plugin manager for neovim
+        clang
+        # tools for using vterm with emacs
+        cmake
+        gnumake
+        libtool
+        # for Japanese input
+        # ibus-engines.mozc
+        ntfs3g
+        xclip
+        fw-ectool
+        elan
         # security tools
         bitwarden-desktop
         sops
@@ -86,7 +96,11 @@ in
         racket
       ];
 
-      home.sessionVariables = {
+      environment.sessionVariables = {
+        # Make GTK3 file-chooser settings discoverable
+        # per https://github.com/NixOS/nixpkgs/issues/467783#issuecomment-3648708206
+        GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
+
         # SSH_AUTH_SOCK = "${config.home.homeDirectory}/.bitwarden-ssh-agent.sock";
         TYPST_PACKAGE_PATH = lib.makeSearchPath "share/typst/packages" [
           pkgs.typstPackages.brilliant-cv
@@ -98,31 +112,6 @@ in
       # auto configure fonts installed via packages
       fonts.fontconfig.enable = true;
 
-      home.stateVersion = "23.05";
-    };
-
-  flake.modules.nixos.laptop =
-    {
-      pkgs,
-      modulesPath,
-      ...
-    }:
-    {
-      imports = with topConfig.flake.modules.nixos; [
-        (modulesPath + "/installer/scan/not-detected.nix")
-        inputs.nix-flatpak.nixosModules.nix-flatpak
-        backup
-        base
-        devenv
-        gaming
-        udev
-        kanata
-        nostr
-        sops
-        power
-        tailscale
-        yubikey
-      ];
 
       services.flatpak.enable = true;
       services.flatpak.packages = [ "com.orcaslicer.OrcaSlicer" ];
@@ -159,22 +148,6 @@ in
           "cdrom"
         ];
       };
-
-      environment.systemPackages = with pkgs; [
-        # tools for using lazy plugin manager for neovim
-        clang
-        # tools for using vterm with emacs
-        cmake
-        gnumake
-        libtool
-        # for Japanese input
-        # ibus-engines.mozc
-        ntfs3g
-        home-manager
-        xclip
-        fw-ectool
-        elan
-      ];
 
       # installs framework laptop firmware manager
       # to update firmware, run: sudo fwupdmgr update
@@ -227,12 +200,5 @@ in
       nixpkgs.config.permittedInsecurePackages = [
         "electron-39.8.10"
       ];
-
-      # This fixes FreeCAD crash upon opening 3D model files
-      environment.sessionVariables = {
-        # Make GTK3 file-chooser settings discoverable
-        # per https://github.com/NixOS/nixpkgs/issues/467783#issuecomment-3648708206
-        GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
-      };
     };
 }

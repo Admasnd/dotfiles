@@ -5,7 +5,7 @@ in
 {
   # TODO create a disko configuration for nixjoy and test backup and restore
   # TODO backup game saves and game data
-  flake.modules.nixos.nixjoy =
+  flake.nixosModules.nixjoy =
     {
       config,
       lib,
@@ -14,14 +14,11 @@ in
     }:
     {
 
-      imports = with topConfig.flake.modules.nixos; [
+      imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
-        base
-        udev
-        gaming
-        tailscale
-        sops
-        vm
+        topConfig.flake.nixosModules.base
+        topConfig.flake.nixosModules.gaming
+        topConfig.flake.nixosModules.vm
       ];
 
       admasnd.dotfiles = {
