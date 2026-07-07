@@ -107,7 +107,7 @@
           q    w      e    r    t       y    u    i   o     p
     caps  a    s      d    f    g       h    j    k   l     ;    '
     lsft  z    x      c    v    b       n    m    ,   .     /
-          lalt                               spc ralt rctl
+          rsft                               spc ralt rctl
 )
 
 (deflayer def 
