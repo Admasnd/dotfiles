@@ -1,1 +1,5 @@
 add-highlighter global/ number-lines -relative
+
+declare-user-mode file-menu
+map -docstring 'enter file-menu mode' global user f ':enter-user-mode file-menu<ret>' 
+map -docstring 'call grep command' global file-menu g ':grep ' 
