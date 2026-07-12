@@ -84,7 +84,6 @@
         ghostty
         puddletag
         whipper
-        kakoune
         # programming
         tmux
         nodejs
