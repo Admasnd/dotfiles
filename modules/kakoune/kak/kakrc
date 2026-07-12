@@ -1,5 +1,15 @@
+# set relative line mode where current line displays absolute line number
 add-highlighter global/ number-lines -relative
 
-declare-user-mode file-menu
-map -docstring 'enter file-menu mode' global user f ':enter-user-mode file-menu<ret>' 
-map -docstring 'call grep command' global file-menu g ':grep ' 
+# fzf Setup
+# Load modules before setting fzf options
+require-module fzf
+require-module fzf-file
+require-module fzf-buffer
+require-module fzf-grep
+# Set commands to use for fzf commands
+set-option global fzf_file_command 'rg'
+set-option global fzf_grep_command 'rg'
+set-option global fzf_highlight_command 'bat'
+# Map fzf-mode command to `<spc>f`
+map -docstring 'invoke fzf-mode command' global user f ': fzf-mode<ret>'
