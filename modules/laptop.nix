@@ -31,10 +31,8 @@
         enable = true;
         completion.enable = true;
         shellAliases = {
-          ns = "sudo nixos-rebuild --flake . switch --max-jobs auto";
-          nb = "nixos-rebuild --flake . build --max-jobs auto";
-          hs = "home-manager --flake . switch --max-jobs auto";
-          hb = "home-manager --flake . build --max-jobs auto";
+          ns = "sudo nixos-rebuild --flake /home/antwane/dev/private-dotfiles switch --max-jobs auto --cores 8";
+          nt = "sudo nixos-rebuild --flake /home/antwane/dev/private-dotfiles test --override-input dotfiles /home/antwane/dev/dotfiles --max-jobs auto --cores 8";
           ll = "ls -la";
           fu = "nix flake update";
         };
