@@ -31,9 +31,12 @@
         settings = {
           aliases = {
             bm = [
-              "bookmark"
-              "move"
-              "master"
+              "util"
+              "exec"
+              "--"
+              "bash"
+              "-c"
+              "jj bookmark move master && jj new"
             ];
             gh = [
               "util"
