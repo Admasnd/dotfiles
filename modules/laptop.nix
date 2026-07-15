@@ -14,7 +14,6 @@
     {
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
-        inputs.nix-flatpak.nixosModules.nix-flatpak
       ];
 
       programs.git.enable = true;
@@ -80,6 +79,7 @@
         yazi # file manager tui
         fd # find replacement
         ghostty
+        orca-slicer
         puddletag
         whipper
         # programming
@@ -108,14 +108,6 @@
 
       # auto configure fonts installed via packages
       fonts.fontconfig.enable = true;
-
-
-      services.flatpak.enable = true;
-      services.flatpak.packages = [ "com.orcaslicer.OrcaSlicer" ];
-      services.flatpak.update.auto = {
-        enable = true;
-        onCalendar = "weekly"; # Default value
-      };
 
       admasnd.dotfiles = {
         gaming.steam = {
