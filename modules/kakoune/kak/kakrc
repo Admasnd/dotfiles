@@ -13,3 +13,7 @@ set-option global fzf_grep_command 'rg'
 set-option global fzf_highlight_command 'bat'
 # Map fzf-mode command to `<spc>f`
 map -docstring 'invoke fzf-mode command' global user f ': fzf-mode<ret>'
+
+# add keymaps for commenting out code
+map -docstring 'comment-line' global normal <#> ': comment-line<ret>'
+map -docstring 'comment-block' global normal <a-#> ': comment-block<ret>'
