@@ -17,12 +17,11 @@
   perSystem =
     { pkgs, ... }:
     let
-      jjPush = pkgs.writeShellApplication {
+      ghPush = pkgs.writeShellApplication {
         name = "jujutsu-push";
         runtimeInputs = with pkgs; [ jujutsu ];
         text = ''
           SSH_AUTH_SOCK=~/.bitwarden-ssh-agent.sock jj git push
-          jj git push --remote rad
         '';
       };
     in
@@ -36,10 +35,10 @@
               "move"
               "master"
             ];
-            gp = [
+            gh = [
               "util"
               "exec"
-              "${jjPush}/bin/jujutsu-push"
+              "${ghPush}/bin/jujutsu-push"
             ];
           };
           ui = {
