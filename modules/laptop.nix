@@ -18,6 +18,11 @@
 
       programs.git.enable = true;
 
+      programs.zoxide = {
+          enable = true;
+          enableBashIntegration = true;
+      };
+
       # enables (un)loading environment variables by changing directories
       programs.direnv = {
         enable = true;
@@ -75,7 +80,6 @@
         vlc
         jq
         mumble
-        zoxide # cd alternative
         yazi # file manager tui
         fd # find replacement
         ghostty
