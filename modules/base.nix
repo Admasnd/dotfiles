@@ -16,6 +16,8 @@
       options = "--delete-older-than 14d";
     };
 
+    documentation.man.cache.enable = true;
+
     # Settings shared across hosts
     system.stateVersion = "25.05";
 
