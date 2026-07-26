@@ -6,8 +6,7 @@
       environment.sessionVariables = {
           EDITOR = "kak";
       };
-    }
-  );
+  });
   perSystem =
     { lib, pkgs, ... }:
     let
@@ -31,6 +30,7 @@
           ripgrep
           tmux
           wl-clipboard
+          (aspellWithDicts (d: with d; [ en en-computers ]))
         ];
         env.XDG_CONFIG_HOME = "${myConfigDir}";
         runShell = [

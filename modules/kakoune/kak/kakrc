@@ -23,3 +23,13 @@ map -docstring 'yank to clipboard (Wayland)' global user y '<a-|> wl-copy <ret>'
 map -docstring 'paste after the end of each selection from clipboard (Wayland)' global user p '<a-!> wl-paste -n <ret>'
 map -docstring 'paste before the end of each selection from clipboard (Wayland)' global user P '! wl-paste -n <ret>'
 map -docstring 'replace each selection with clipboard (Wayland)' global user R '| wl-paste -n <ret>'
+
+# add keymaps for spell checking
+declare-user-mode spell
+map -docstring 'enter spell user-mode' global user s ':enter-user-mode spell<ret>'
+map -docstring 'spell check buffer' global spell b ':spell<ret>'
+map -docstring 'clear spell check' global spell c ':spell-clear<ret>'
+map -docstring 'jump to next misspelled word' global spell n ':spell-next<ret>'
+map -docstring 'jump to previous misspelled word' global spell p ':spell-prev<ret>'
+map -docstring 'suggest replacement words for current selection' global spell r ':spell-replace<ret>'
+map -docstring 'add current selection to personal dictionary' global spell a ':spell-add<ret>'
