@@ -30,6 +30,7 @@
           bat
           ripgrep
           tmux
+          wl-clipboard
         ];
         env.XDG_CONFIG_HOME = "${myConfigDir}";
         runShell = [

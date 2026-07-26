@@ -17,3 +17,9 @@ map -docstring 'invoke fzf-mode command' global user f ': fzf-mode<ret>'
 # add keymaps for commenting out code
 map -docstring 'comment-line' global normal <#> ': comment-line<ret>'
 map -docstring 'comment-block' global normal <a-#> ': comment-block<ret>'
+
+# add keymaps for working with system clipboard
+map -docstring 'yank to clipboard (Wayland)' global user y '<a-|> wl-copy <ret>'
+map -docstring 'paste after the end of each selection from clipboard (Wayland)' global user p '<a-!> wl-paste -n <ret>'
+map -docstring 'paste before the end of each selection from clipboard (Wayland)' global user P '! wl-paste -n <ret>'
+map -docstring 'replace each selection with clipboard (Wayland)' global user R '| wl-paste -n <ret>'
