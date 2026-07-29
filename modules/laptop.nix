@@ -84,7 +84,13 @@
         fd # find replacement
         ghostty
         orca-slicer
-        puddletag
+        (inputs.wrapper-modules.lib.wrapPackage {
+          inherit pkgs;
+          package = pkgs.puddletag;
+          runtimePkgs = with pkgs; [
+            chromaprint
+          ];
+        })
         whipper
         # programming
         tmux
