@@ -84,6 +84,7 @@
         fd # find replacement
         ghostty
         orca-slicer
+        minidsp
         (inputs.wrapper-modules.lib.wrapPackage {
           inherit pkgs;
           package = pkgs.puddletag;
