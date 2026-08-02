@@ -1,0 +1,6 @@
+# Prevent snd-usb-audio from binding to MiniDSP Flex (causes USB disconnect)
+# VID 2752 = miniDSP, PID 0011 = Flex (same as 2x4HD)
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="2752", ATTRS{idProduct}=="0011", DRIVER=="snd-usb-audio", RUN+="/bin/sh -c 'echo $kernel > /sys/bus/usb/drivers/snd-usb-audio/unbind'"
+
+# Allow hidraw access for minidsp-rs
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2752", MODE="0666"
