@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.nixosModules.base = {
+  flake.nixosModules.base = { pkgs, ...}:{
     imports = [
       inputs.disko.nixosModules.disko
     ];
@@ -69,5 +69,9 @@
 
     # necessary for bash to completion
     environment.pathsToLink = [ "/share/bash-completion" ];
+
+    environment.systemPackages = with pkgs; [
+      usbutils
+    ];
   };
 }
