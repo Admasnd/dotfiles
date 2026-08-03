@@ -1,12 +1,14 @@
-{ inputs, ... }:
+{ inputs, moduleWithSystem, ... }:
 {
-  flake.nixosModules.laptop = { pkgs, ... }: {
+  flake.nixosModules.laptop = moduleWithSystem (
+  perSystem@{ inputs', ...}:
+  nixos@{ pkgs, ... }: {
     environment.systemPackages = [
       (inputs.wrapper-modules.lib.wrapPackage {
         inherit pkgs;
-        package = pkgs.papis;
+        package = inputs'.nixpkgs-stable.legacyPackages.papis;
         flags."-c" = ./config;
       })
     ];
-  };
+  });
 }
