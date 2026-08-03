@@ -15,6 +15,11 @@
       laptop =
         { pkgs, ... }:
         {
+          environment.systemPackages = with pkgs; [
+              minidsp
+              roomeqwizard
+          ];
+
           # add miniDSP Flex related udev rules
           services.udev.packages = [
             (pkgs.concatTextFile {
