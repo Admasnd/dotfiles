@@ -126,14 +126,6 @@
         };
       };
 
-      services.printing = {
-        enable = true;
-        drivers = [
-          pkgs.samsung-unified-linux-driver
-          pkgs.brlaser
-        ];
-      };
-
       # Define a user account. Don't forget to set a password with ‘passwd’.
       users.groups.uinput = { };
       users.groups.plugdev = { };
