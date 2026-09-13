@@ -99,7 +99,7 @@
         moonlight-qt
         typst
         radicle-node
-        freecad
+        inputs.nixpkgs-stable.legacyPackages.x86_64-linux.freecad
         racket
       ];
 
